@@ -8,28 +8,26 @@ const category = params.get("category");
 
 document.getElementById("categoryTitle").innerText = category;
 
-loadCSV().then(data => {
+Promise.all([loadSubcategoryCategories(), loadEngineSubcategories()]).then(([subcatCats, engineSubcats]) => {
 
-    const filtered = data.filter(item =>
-        item.Category === category
-    );
+    const subcategories = subcatCats.filter(item => item.Category === category).map(item => item.Subcategory);
 
     const engineList = document.getElementById("engineList");
 
-    filtered.forEach(engine => {
+    subcategories.forEach(subcategory => {
 
         const card = document.createElement("div");
 
         card.className = "card";
 
         card.innerHTML = `
-            <h3>${engine.Engine}</h3>
+            <h3>${subcategory}</h3>
         `;
 
         card.onclick = () => {
 
             window.location.href =
-                `AIEngine.html?engine=${encodeURIComponent(engine.Engine)}`;
+                `AISubcat.html?subcategory=${encodeURIComponent(subcategory)}`;
 
         };
 

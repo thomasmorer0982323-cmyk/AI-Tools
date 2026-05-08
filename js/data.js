@@ -1,6 +1,6 @@
-async function loadCSV() {
+async function loadCSV(filename) {
 
-    const response = await fetch("data/AiData.csv");
+    const response = await fetch(`data/${filename}`);
     const data = await response.text();
 
     const rows = data.trim().split("\n");
@@ -19,4 +19,16 @@ async function loadCSV() {
 
         return obj;
     });
+}
+
+async function loadAiData() {
+    return loadCSV("AiData.csv");
+}
+
+async function loadSubcategoryCategories() {
+    return loadCSV("SubcategoryCategories.csv");
+}
+
+async function loadEngineSubcategories() {
+    return loadCSV("EngineSubcategories.csv");
 }

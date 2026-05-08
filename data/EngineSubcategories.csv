@@ -1,0 +1,40 @@
+Engine,Subcategory
+ChatGPT,Conversational
+ChatGPT,Text Generation
+Claude Opus,Conversational
+Claude Opus,Reasoning
+Copilot,Productivity
+Copilot,Coding
+DALL-E,Image Generation
+Midjourney,Image Generation
+Midjourney,Creative
+Gemini,Multimodal
+Gemini,Conversational
+Perplexity,Search
+Perplexity,Conversational
+Runway,Video Editing
+Runway,Video Generation
+Stable Diffusion,Image Generation
+Stable Diffusion,Open Source
+Notion AI,Productivity
+Notion AI,Writing
+Jasper,Content Generation
+Jasper,Marketing
+Synthesia,Video Generation
+Synthesia,Avatar
+Leonardo AI,Image Generation
+Leonardo AI,Art
+Mistral,Text Generation
+Mistral,Open Source
+DeepSeek,Reasoning
+DeepSeek,Text Generation
+Cursor,Coding
+Cursor,Developer Tools
+Replit AI,Coding
+Replit AI,Collaboration
+Canva Magic Studio,Design
+Canva Magic Studio,Content Creation
+HeyGen,Video Generation
+HeyGen,Presentation
+ElevenLabs,Voice Synthesis
+ElevenLabs,Audio

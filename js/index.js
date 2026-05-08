@@ -1,4 +1,4 @@
-loadCSV().then(data => {
+loadAiData().then(data => {
 
     const categories = [...new Set(data.map(item => item.Category))];
 

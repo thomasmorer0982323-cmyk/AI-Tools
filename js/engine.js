@@ -6,9 +6,9 @@ const params = new URLSearchParams(window.location.search);
 
 const engineName = params.get("engine");
 
-loadCSV().then(data => {
+Promise.all([loadAiData(), loadEngineSubcategories()]).then(([aiData, engineSubcats]) => {
 
-    const engine = data.find(item =>
+    const engine = aiData.find(item =>
         item.Engine === engineName
     );
 
@@ -29,5 +29,14 @@ loadCSV().then(data => {
 
     document.getElementById("engineDescription").innerText =
         engine.description;
+
+    // Display subcategories
+    const subcategories = engineSubcats.filter(item => item.Engine === engineName).map(item => item.Subcategory);
+    const subcatList = document.getElementById("subcategories");
+    subcategories.forEach(subcat => {
+        const li = document.createElement("li");
+        li.innerText = subcat;
+        subcatList.appendChild(li);
+    });
 
 });
