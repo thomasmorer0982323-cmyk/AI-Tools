@@ -1,9 +1,9 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f4f8;
+    background-color: #ec6639;
     margin: 0;
     padding: 0;
-    color: #222;
+    color: #000000;
 }
 
 .container {
@@ -45,14 +45,14 @@ h2 {
 
 .card:hover {
     transform: scale(1.03);
-    background-color: #eaf3ff;
+    background-color: #fcad68a4;
 }
 
 .back-button {
     padding: 10px 20px;
     border: none;
-    background-color: #0078d4;
-    color: white;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
     border-radius: 8px;
     cursor: pointer;
     margin-bottom: 20px;
@@ -86,7 +86,7 @@ h2 {
 }
 
 .back-button:hover {
-    background-color: #005fa3;
+    background-color: #ffffff;
 }
 
 .engine-image {
@@ -106,7 +106,7 @@ h2 {
 }
 
 .website-link a {
-    color: #0078d4;
+    color: #ffffff;
     font-size: 18px;
     text-decoration: none;
 }
@@ -123,5 +123,5 @@ h2 {
     height: 250px;
     overflow-y: auto;
     line-height: 1.6;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
