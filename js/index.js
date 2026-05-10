@@ -40,17 +40,19 @@ function displaySearchResults(searchTerm) {
             return engineName.includes(term) || category.includes(term) || subcats.some(sub => sub.includes(term));
         });
 
-        if (filteredEngines.length === 0) {
+        const uniqueEngines = [...new Map(filteredEngines.map(engine => [engine.Engine, engine])).values()];
+
+        if (uniqueEngines.length === 0) {
             categoryList.innerHTML = '<p>No results found.</p>';
             return;
         }
 
-        filteredEngines.forEach(engine => {
+        uniqueEngines.forEach(engine => {
             const card = document.createElement("div");
             card.className = "card";
 
-            // Get subcategories for this engine
-            const subcats = engineSubcats.filter(es => es.Engine === engine.Engine).map(es => es.Subcategory);
+            // Get unique subcategories for this engine
+            const subcats = [...new Set(engineSubcats.filter(es => es.Engine === engine.Engine).map(es => es.Subcategory))];
 
             card.innerHTML = `
                 <h3>${engine.Engine}</h3>

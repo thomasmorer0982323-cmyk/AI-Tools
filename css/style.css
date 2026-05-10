@@ -243,22 +243,142 @@ a:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* RATING */
+.rating-panel {
+    margin-top: var(--space-4);
+    background: #ffffff;
+    padding: var(--space-4);
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.rating-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: baseline;
+    margin-bottom: var(--space-3);
+    font-weight: 700;
+}
+
+.rating-summary span {
+    color: #333;
+}
+
+.rating-form {
+    display: grid;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.rating-form label {
+    font-weight: 600;
+    color: #444;
+}
+
+.rating-form select,
+.rating-form textarea {
+    width: 100%;
+    padding: var(--space-3);
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background: #fbfbfb;
+    font-size: 1rem;
+}
+
+.rating-form button {
+    width: fit-content;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 999px;
+    background: #2a7ae2;
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.rating-form button:hover {
+    background: #2563c5;
+}
+
+.rating-message {
+    font-size: 0.95rem;
+    margin-top: var(--space-1);
+}
+
+.rating-message.success {
+    color: #187b56;
+}
+
+.rating-message.error {
+    color: #b91c1c;
+}
+
+.comments-section {
+    margin-top: var(--space-4);
+}
+
+.comments-list {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.comment-item {
+    padding: var(--space-3);
+    border-radius: 14px;
+    background: #f7f9fc;
+    color: #333;
+}
+
+.comment-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+    font-size: 0.92rem;
+    color: #555;
+}
+
+.comment-score {
+    font-weight: 700;
+}
+
+.comment-date {
+    opacity: 0.75;
+}
+
+.no-comments {
+    color: #666;
+}
+
 /* SUBCATEGORIES */
 .subcategories-list {
     margin-top: var(--space-4);
+    text-align: center;
 }
 
 .subcategories-list h3 {
     margin-bottom: var(--space-2);
+    font-size: 0.95rem;
+    color: #666;
 }
 
 .subcategories-list ul {
-    list-style-type: disc;
-    padding-left: var(--space-4);
+    list-style: none;
+    padding: 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
 }
 
 .subcategories-list li {
-    margin-bottom: var(--space-2);
+    margin-bottom: 0;
+    padding: 6px 12px;
+    background: #f2f4f7;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    color: #5e6c84;
 }
 
 /* IMAGE */
