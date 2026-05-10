@@ -201,12 +201,14 @@ a:hover {
 /* BUTTON */
 .back-button {
     padding: var(--space-2) var(--space-3);
-    border: none;
+    border: 1px solid var(--accent);
     background-color: white;
-    color: #ff7016;
+    color: var(--accent);
     border-radius: 8px;
     cursor: pointer;
     margin-bottom: var(--space-4);
+
+    transition: all 0.2s ease;
 
     opacity: 0;
     transform: translateY(-10px);
@@ -214,8 +216,10 @@ a:hover {
 }
 
 .back-button:hover {
-    background-color: #ffffff;
+    background-color: var(--accent);
+    color: rgb(255, 136, 0);
 }
+
 
 /* TEXT BOXES */
 .textbox {
