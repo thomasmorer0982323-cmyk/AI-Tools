@@ -7,8 +7,24 @@ async function loadAllData() {
     return { aiData, subcatCats, engineSubcats };
 }
 
+function getEngineSubcategories(engineName, engineSubcats) {
+    return [...new Set(engineSubcats
+        .filter(es => es.Engine === engineName)
+        .map(es => es.Subcategory))];
+}
+
+function getEngineCategories(engineName, subcatCats, engineSubcats) {
+    const subcategories = getEngineSubcategories(engineName, engineSubcats);
+    return [...new Set(subcategories
+        .map(subcat => {
+            const mapping = subcatCats.find(item => item.Subcategory === subcat);
+            return mapping ? mapping.Category : '';
+        })
+        .filter(Boolean))];
+}
+
 function displayCategories() {
-    loadAiData().then(data => {
+    loadSubcategoryCategories().then(data => {
         const categories = [...new Set(data.map(item => item.Category))];
         const categoryList = document.getElementById("categoryList");
         categoryList.innerHTML = ''; // Clear previous content
@@ -33,11 +49,11 @@ function displaySearchResults(searchTerm) {
         // Filter engines based on search term
         const filteredEngines = aiData.filter(engine => {
             const engineName = engine.Engine.toLowerCase();
-            const category = engine.Category.toLowerCase();
-            const subcats = engineSubcats.filter(es => es.Engine === engine.Engine).map(es => es.Subcategory.toLowerCase());
+            const engineSubcategories = getEngineSubcategories(engine.Engine, engineSubcats).map(sub => sub.toLowerCase());
+            const engineCategories = getEngineCategories(engine.Engine, subcatCats, engineSubcats).map(cat => cat.toLowerCase());
             const term = searchTerm.toLowerCase();
 
-            return engineName.includes(term) || category.includes(term) || subcats.some(sub => sub.includes(term));
+            return engineName.includes(term) || engineCategories.some(cat => cat.includes(term)) || engineSubcategories.some(sub => sub.includes(term));
         });
 
         const uniqueEngines = [...new Map(filteredEngines.map(engine => [engine.Engine, engine])).values()];
@@ -51,17 +67,17 @@ function displaySearchResults(searchTerm) {
             const card = document.createElement("div");
             card.className = "card";
 
-            // Get unique subcategories for this engine
-            const subcats = [...new Set(engineSubcats.filter(es => es.Engine === engine.Engine).map(es => es.Subcategory))];
+            const subcats = getEngineSubcategories(engine.Engine, engineSubcats);
+            const categories = getEngineCategories(engine.Engine, subcatCats, engineSubcats);
 
             card.innerHTML = `
                 <h3>${engine.Engine}</h3>
-                <p><strong>Category:</strong> ${engine.Category}</p>
+                <p><strong>Category:</strong> ${categories.join(', ')}</p>
                 <p><strong>Subcategories:</strong> ${subcats.join(', ')}</p>
             `;
 
             card.onclick = () => {
-                window.location.href = `AIEngine.html?engine=${encodeURIComponent(engine.Engine)}`;
+                window.location.href = `AIEngine.html?engine=${encodeURIComponent(engine.Engine)}&from=search&search=${encodeURIComponent(searchTerm)}`;
             };
 
             categoryList.appendChild(card);
@@ -69,15 +85,30 @@ function displaySearchResults(searchTerm) {
     });
 }
 
-// Initial load: display categories
-displayCategories();
+function updateSearchUrl(searchTerm) {
+    if (searchTerm) {
+        window.history.replaceState(null, '', `?search=${encodeURIComponent(searchTerm)}`);
+    } else {
+        window.history.replaceState(null, '', window.location.pathname);
+    }
+}
+
+const initialSearchTerm = new URLSearchParams(window.location.search).get('search');
+if (initialSearchTerm) {
+    document.getElementById('searchInput').value = initialSearchTerm;
+    displaySearchResults(initialSearchTerm);
+} else {
+    displayCategories();
+}
 
 // Search functionality
 document.getElementById('searchButton').addEventListener('click', () => {
     const searchTerm = document.getElementById('searchInput').value.trim();
     if (searchTerm) {
+        updateSearchUrl(searchTerm);
         displaySearchResults(searchTerm);
     } else {
+        updateSearchUrl('');
         displayCategories();
     }
 });
@@ -86,8 +117,10 @@ document.getElementById('searchInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         const searchTerm = document.getElementById('searchInput').value.trim();
         if (searchTerm) {
+            updateSearchUrl(searchTerm);
             displaySearchResults(searchTerm);
         } else {
+            updateSearchUrl('');
             displayCategories();
         }
     }

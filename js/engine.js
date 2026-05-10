@@ -1,19 +1,67 @@
 function goBack() {
+    const params = new URLSearchParams(window.location.search);
+    const from = params.get('from');
+
+    if (from === 'subcat') {
+        const subcategory = params.get('subcategory');
+        const category = params.get('category');
+        if (subcategory) {
+            let url = `AISubcat.html?subcategory=${encodeURIComponent(subcategory)}`;
+            if (category) {
+                url += `&category=${encodeURIComponent(category)}`;
+            }
+            window.location.href = url;
+            return;
+        }
+    }
+
+    if (from === 'category') {
+        const category = params.get('category');
+        if (category) {
+            window.location.href = `AICat.html?category=${encodeURIComponent(category)}`;
+            return;
+        }
+    }
+
+    if (from === 'search') {
+        const searchTerm = params.get('search');
+        if (searchTerm) {
+            window.location.href = `index.html?search=${encodeURIComponent(searchTerm)}`;
+            return;
+        }
+    }
+
     window.history.back();
+}
+
+function goHome() {
+    window.location.href = 'index.html';
+}
+
+function getEngineSubcategories(engineName, engineSubcats) {
+    return [...new Set(engineSubcats.filter(es => es.Engine === engineName).map(es => es.Subcategory))];
+}
+
+function getEngineCategories(engineName, subcatCats, engineSubcats) {
+    const subcategories = getEngineSubcategories(engineName, engineSubcats);
+    return [...new Set(subcategories.map(subcat => {
+        const mapping = subcatCats.find(item => item.Subcategory === subcat);
+        return mapping ? mapping.Category : '';
+    }).filter(Boolean))];
 }
 
 const params = new URLSearchParams(window.location.search);
 
 const engineName = params.get("engine");
 
-Promise.all([loadAiData(), loadEngineSubcategories()]).then(async ([aiData, engineSubcats]) => {
+Promise.all([loadAiData(), loadSubcategoryCategories(), loadEngineSubcategories()]).then(async ([aiData, subcatCats, engineSubcats]) => {
 
     const engine = aiData.find(item =>
         item.Engine === engineName
     );
 
-    document.getElementById("categoryName").innerText =
-        engine.Category;
+    const categories = getEngineCategories(engineName, subcatCats, engineSubcats);
+    document.getElementById("categoryName").innerText = categories.length ? categories.join(', ') : 'Geen categorie';
 
     document.getElementById("engineName").innerText =
         engine.Engine;

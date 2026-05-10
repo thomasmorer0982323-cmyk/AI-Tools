@@ -1,14 +1,23 @@
 function goBack() {
-    window.history.back();
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get("category");
+    if (category) {
+        window.location.href = `AICat.html?category=${encodeURIComponent(category)}`;
+        return;
+    }
+    window.location.href = 'index.html';
+}
+
+function goHome() {
+    window.location.href = 'index.html';
 }
 
 const params = new URLSearchParams(window.location.search);
 
 const subcategory = params.get("subcategory");
+const category = params.get("category");
 
 document.getElementById("subcategoryTitle").innerText = subcategory;
-
-console.log("Subcategory from URL:", subcategory);
 
 Promise.all([loadAiData(), loadEngineSubcategories()]).then(([aiData, engineSubcats]) => {
 
@@ -38,10 +47,11 @@ Promise.all([loadAiData(), loadEngineSubcategories()]).then(([aiData, engineSubc
             `;
 
             card.onclick = () => {
-
-                window.location.href =
-                    `AIEngine.html?engine=${encodeURIComponent(engine.Engine)}`;
-
+                let url = `AIEngine.html?engine=${encodeURIComponent(engine.Engine)}&from=subcat&subcategory=${encodeURIComponent(subcategory)}`;
+                if (category) {
+                    url += `&category=${encodeURIComponent(category)}`;
+                }
+                window.location.href = url;
             };
 
             engineList.appendChild(card);

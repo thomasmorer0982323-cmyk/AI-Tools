@@ -1,34 +1,23 @@
-Engine,Category,weblink,imagelink,description
-ChatGPT,Communication,https://chat.openai.com,chatgpt.png,Advanced conversational AI from OpenAI.
-ChatGPT,Lesson Planning,https://chat.openai.com,chatgpt.png,Advanced conversational AI from OpenAI.
-ChatGPT,Differentiation,https://chat.openai.com,chatgpt.png,Advanced conversational AI from OpenAI.
-Claude Opus,Communication,https://claude.ai,claude.png,Anthropic's powerful AI assistant.
-Claude Opus,Lesson Planning,https://claude.ai,claude.png,Anthropic's powerful AI assistant.
-Claude Opus,Differentiation,https://claude.ai,claude.png,Anthropic's powerful AI assistant.
-Copilot,Communication,https://copilot.microsoft.com,copilot.png,Microsoft AI productivity assistant.
-Copilot,Lesson Planning,https://copilot.microsoft.com,copilot.png,Microsoft AI productivity assistant.
-Copilot,Differentiation,https://copilot.microsoft.com,copilot.png,Microsoft AI productivity assistant.
-DALL-E,Visual Content,https://openai.com/dall-e,dalle.png,AI Image generator engine from OpenAI.
-Midjourney,Visual Content,https://www.midjourney.com,midjourney.png,Creative AI Image generator platform.
-Gemini,Communication,https://gemini.google.com,gemini.png,Google's multimodal AI assistant.
-Gemini,Lesson Planning,https://gemini.google.com,gemini.png,Google's multimodal AI assistant.
-Perplexity,Communication,https://www.perplexity.ai,perplexity.png,AI-powered conversational search engine.
-Runway,Visual Content,https://runwayml.com,runway.png,AI video editing and generation suite.
-Stable Diffusion,Visual Content,https://stability.ai,stable_diffusion.png,Open-source AI Image generator model.
-Notion AI,Communication,https://www.notion.so/product/ai,notion_ai.png,AI-enhanced workspace and writing assistant.
-Notion AI,Differentiation,https://www.notion.so/product/ai,notion_ai.png,AI-enhanced workspace and writing assistant.
-Jasper,Communication,https://www.jasper.ai,jasper.png,AI content generation for marketing teams.
-Jasper,Lesson Planning,https://www.jasper.ai,jasper.png,AI content generation for marketing teams.
-Jasper,Differentiation,https://www.jasper.ai,jasper.png,AI content generation for marketing teams.
-Synthesia,Visual Content,https://www.synthesia.io,synthesia.png,AI avatar and video generation platform.
-Leonardo AI,Visual Content,https://leonardo.ai,leonardo.png,AI art and game asset creation platform.
-Mistral,Communication,https://mistral.ai,mistral.png,European open-weight AI models provider.
-DeepSeek,Communication,https://www.deepseek.com,deepseek.png,Advanced reasoning-focused AI assistant.
-DeepSeek,Lesson Planning,https://www.deepseek.com,deepseek.png,Advanced reasoning-focused AI assistant.
-Cursor,Communication,https://cursor.com,cursor.png,AI-powered code editor for developers.
-Replit AI,Communication,https://replit.com,replit.png,Collaborative coding platform with AI features.
-HeyGen,Visual Content,https://www.heygen.com,heygen.png,AI talking avatars and presentation videos.
-ElevenLabs,Communication,https://elevenlabs.io,elevenlabs.png,AI voice synthesis and dubbing platform.
-Diffit,Differentiation,https://www.diffit.com,diffit.png,AI-powered text adaptation and rewriting tool.
-Twee,Lesson Planning,https://www.twee.com,twee.jpeg,AI lesson planning and educational content generator.
-Twee,Differentiation,https://www.twee.com,twee.jpeg,AI lesson planning and educational content generator.
+Engine,weblink,imagelink,description
+ChatGPT,https://chat.openai.com,chatgpt.png,Advanced conversational AI from OpenAI.
+Claude Opus,https://claude.ai,claude.png,Anthropic's powerful AI assistant.
+Copilot,https://copilot.microsoft.com,copilot.png,Microsoft AI productivity assistant.
+DALL-E,https://openai.com/dall-e,dalle.png,AI Image generator engine from OpenAI.
+Midjourney,https://www.midjourney.com,midjourney.png,Creative AI Image generator platform.
+Gemini,https://gemini.google.com,gemini.png,Google's multimodal AI assistant.
+Perplexity,https://www.perplexity.ai,perplexity.png,AI-powered conversational search engine.
+Runway,https://runwayml.com,runway.png,AI video editing and generation suite.
+Stable Diffusion,https://stability.ai,stable_diffusion.png,Open-source AI Image generator model.
+Notion AI,https://www.notion.so/product/ai,notion_ai.png,AI-enhanced workspace and writing assistant.
+Jasper,https://www.jasper.ai,jasper.png,AI content generation for marketing teams.
+Synthesia,https://www.synthesia.io,synthesia.png,AI avatar and video generation platform.
+Leonardo AI,https://leonardo.ai,leonardo.png,AI art and game asset creation platform.
+Mistral,https://mistral.ai,mistral.png,European open-weight AI models provider.
+DeepSeek,https://www.deepseek.com,deepseek.png,Advanced reasoning-focused AI assistant.
+Cursor,https://cursor.com,cursor.png,AI-powered code editor for developers.
+Replit AI,https://replit.com,replit.png,Collaborative coding platform with AI features.
+HeyGen,https://www.heygen.com,heygen.png,AI talking avatars and presentation videos.
+ElevenLabs,https://elevenlabs.io,elevenlabs.png,AI voice synthesis and dubbing platform.
+Diffit,https://www.diffit.com,diffit.png,AI-powered text adaptation and rewriting tool.
+Twee,https://www.twee.com,chatgpt.png,AI lesson planning and educational content generator.
+Drie,https://www.drie.com,drie.jpeg,AI lesson planning and educational content generator.

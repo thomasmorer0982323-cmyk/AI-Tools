@@ -1,5 +1,9 @@
 function goBack() {
-    window.history.back();
+    window.location.href = 'index.html';
+}
+
+function goHome() {
+    window.location.href = 'index.html';
 }
 
 const params = new URLSearchParams(window.location.search);
@@ -25,10 +29,8 @@ Promise.all([loadSubcategoryCategories(), loadEngineSubcategories()]).then(([sub
         `;
 
         card.onclick = () => {
-
             window.location.href =
-                `AISubcat.html?subcategory=${encodeURIComponent(subcategory)}`;
-
+                `AISubcat.html?subcategory=${encodeURIComponent(subcategory)}&category=${encodeURIComponent(category)}`;
         };
 
         engineList.appendChild(card);
