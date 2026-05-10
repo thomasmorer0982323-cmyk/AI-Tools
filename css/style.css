@@ -179,3 +179,25 @@ h2 {
         background-position: 0% 50%;
     }
 }
+
+.footer {
+    background: white;
+    color: #222;
+    padding: 25px;
+    text-align: center;
+    margin-top: 50px;
+    border-top: 1px solid #eee;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+.footer-logo {
+    width: 120px;
+    height: auto;
+}
