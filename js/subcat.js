@@ -8,15 +8,24 @@ const subcategory = params.get("subcategory");
 
 document.getElementById("subcategoryTitle").innerText = subcategory;
 
+console.log("Subcategory from URL:", subcategory);
+
 Promise.all([loadAiData(), loadEngineSubcategories()]).then(([aiData, engineSubcats]) => {
 
+    console.log("Engine subcategories loaded:", engineSubcats.length);
+    console.log("AI data loaded:", aiData.length);
+
     const engines = engineSubcats.filter(item => item.Subcategory === subcategory).map(item => item.Engine);
+
+    console.log("Filtered engines for subcategory '" + subcategory + "':", engines);
 
     const engineList = document.getElementById("engineList");
 
     engines.forEach(engineName => {
 
         const engine = aiData.find(item => item.Engine === engineName);
+
+        console.log("Looking for engine:", engineName, "Found:", !!engine);
 
         if (engine) {
 
@@ -40,5 +49,7 @@ Promise.all([loadAiData(), loadEngineSubcategories()]).then(([aiData, engineSubc
         }
 
     });
+
+    console.log("Total cards created:", engineList.children.length);
 
 });
