@@ -1,6 +1,5 @@
 Engine,weblink,imagelink,description,Pros,Cons
-ChatGPT,https://chat.openai.com,chatgpt.png,Advanced conversational AI from OpenAI.,Available 24/7_bla bla;Fast answers_blaaaa;Ai tool usable for almost everything_really everything,"Limited usage per day;Answers are based on training data and may not always be fully accurate or up to date
-"
+ChatGPT,https://chat.openai.com,chatgpt.png,Advanced conversational AI from OpenAI.,"24/7_ChatGPT is avaidable all day and all night. As long as you have access to internet you can use ChatGPT.; Fast_answers from ChatGPT are generated very fast.;Multifunctional_ChatGPT is a general-purpose AI tool with a chatbot that can answer questions, generate images, give ideas, write texts and much more.","Incorrect data_ Answers from ChatGPT are based on training data and may not always be fully accurate or up to date.;Unnatural_When using ChatGPT to translate or correct a message, the result may sometimes sound too artificial because it’s not created by a real human.;Limited usage_ChatGPT has a limit to certain features such as creating or modifying an image, uploading of documents. They are only available a certain number of times within a limited period."
 Claude Opus,https://claude.ai,claude.png,Anthropic's powerful AI assistant.,,
 Copilot,https://copilot.microsoft.com,copilot.png,Microsoft AI productivity assistant.,,
 DALL-E,https://openai.com/dall-e,dalle.png,AI Image generator engine from OpenAI.,,
@@ -21,4 +20,3 @@ HeyGen,https://www.heygen.com,heygen.png,AI talking avatars and presentation vid
 ElevenLabs,https://elevenlabs.io,elevenlabs.png,AI voice synthesis and dubbing platform.,,
 Diffit,https://www.diffit.com,diffit.png,AI-powered text adaptation and rewriting tool.,Can adapt text to different reading levels;Can Generate questions and vocabulary from texts that u upload;Helps create differentiated materials,"Mainly focused on reading/text activities, less variety in skills;Not all features are free;Limited creativity compared to general AI tools"
 Twee,https://www.twee.com,twee.png,AI lesson planning and educational content generator.,It has a list of grammar rules for specific topics;It already has pre-written lesson plans;Already made exercises,Mostly English;Most features need to be paid for
-Drie,https://www.drie.com,drie.jpeg,AI lesson planning and educational content generator.,,
