@@ -1,40 +1,36 @@
 Engine,Subcategory
-ChatGPT,Conversational
-ChatGPT,Text Generation
-Claude Opus,Conversational
-Claude Opus,Reasoning
-Copilot,Productivity
-Copilot,Coding
-DALL-E, Image generator
-Midjourney, Image generator
-Midjourney,Creative
-Gemini,Multimodal
-Gemini,Conversational
-Perplexity,Search
-Perplexity,Conversational
-Runway,Video Editing
-Runway,Video generator
-Stable Diffusion, Image generator
-Stable Diffusion,Open Source
-Notion AI,Productivity
-Notion AI,Writing
-Jasper,Content Generation
-Jasper,Marketing
+HeyGen,Video generator
+HeyGen,Presentation generator
 Synthesia,Video generator
-Synthesia,Avatar
-Leonardo AI, Image generator
-Leonardo AI,Art
-Mistral,Text Generation
-Mistral,Open Source
-DeepSeek,Reasoning
-DeepSeek,Text Generation
-Cursor,Coding
-Cursor,Developer Tools
-Replit AI,Coding
-Replit AI,Collaboration
-Canva Magic Studio,Design
-Canva Magic Studio,Content Creation
-HeyGen,Video Generation
-HeyGen,Presentation
-ElevenLabs,Voice Synthesis
-ElevenLabs,Audio
+Synthesia,Presentation generator
+Runway,Video generator
+DALL-E,Image generator
+Midjourney,Image generator
+Stable Diffusion,Image generator
+Leonardo AI,Image generator
+ChatGPT,Writing support
+ChatGPT,Lesson plans
+ChatGPT,Adapting texts
+Claude Opus,Writing support
+Claude Opus,Lesson plans
+Claude Opus,Adapting texts
+Gemini,Writing support
+Gemini,Lesson plans
+Mistral,Writing support
+Perplexity,Writing support
+Jasper,Writing support
+Jasper,Quiz & worksheet generation
+Jasper,Adapting texts
+Jasper,Adjusting exercises
+Notion AI,Writing support
+Notion AI,Adapting texts
+ElevenLabs,Speech support
+Copilot,Writing support
+Cursor,Writing support
+Replit AI,Writing support
+DeepSeek,Writing support
+DeepSeek,Lesson plans
+Diffit,Adapting texts
+Diffit,Adjusting exercises
+Twee,Lesson plans
+Twee,Quiz & worksheet generation
