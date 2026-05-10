@@ -50,6 +50,46 @@ function getEngineCategories(engineName, subcatCats, engineSubcats) {
     }).filter(Boolean))];
 }
 
+function renderFeatureList(rawValue, listId, itemClass) {
+    const list = document.getElementById(listId);
+    if (!list) return;
+    list.innerHTML = '';
+    if (!rawValue) {
+        const emptyItem = document.createElement('li');
+        emptyItem.className = itemClass;
+        emptyItem.textContent = 'Geen items beschikbaar.';
+        list.appendChild(emptyItem);
+        return;
+    }
+
+    const values = rawValue.split(';').map(item => item.trim()).filter(Boolean);
+    values.forEach(rawText => {
+        const [preview, ...rest] = rawText.split('_');
+        const detail = rest.join('_').trim();
+        const item = document.createElement('li');
+        item.className = itemClass;
+        item.innerHTML = `<span class="feature-preview">${escapeHtml(preview.replace(/_/g, ' '))}</span>`;
+
+        if (detail) {
+            const indicator = document.createElement('span');
+            indicator.className = 'feature-indicator';
+            indicator.textContent = 'v';//↓' // ▼';
+            item.appendChild(indicator);
+
+            const detailSpan = document.createElement('span');
+            detailSpan.className = 'feature-detail';
+            detailSpan.textContent = escapeHtml(detail.replace(/_/g, ' '));
+            item.appendChild(detailSpan);
+
+            item.addEventListener('click', () => {
+                item.classList.toggle('expanded');
+            });
+        }
+
+        list.appendChild(item);
+    });
+}
+
 const params = new URLSearchParams(window.location.search);
 
 const engineName = params.get("engine");
@@ -86,6 +126,9 @@ Promise.all([loadAiData(), loadSubcategoryCategories(), loadEngineSubcategories(
         li.innerText = subcat;
         subcatList.appendChild(li);
     });
+
+    renderFeatureList(engine.Pros, "prosList", "pros-item");
+    renderFeatureList(engine.Cons, "consList", "cons-item");
 
     await loadRatingInfo();
 

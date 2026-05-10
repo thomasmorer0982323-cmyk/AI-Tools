@@ -249,10 +249,78 @@ a:hover {
     background: white;
     padding: var(--space-4);
     border-radius: 12px;
-    height: 250px;
+    min-height: 120px;
+    max-height: 250px;
     overflow-y: auto;
     line-height: 1.7;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feature-section {
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    border-radius: 14px;
+}
+
+.feature-list {
+    list-style-type: disc;
+    padding-left: var(--space-5);
+    margin: var(--space-3) 0 0;
+    display: grid;
+    gap: 0.8rem;
+}
+
+.feature-list li {
+    position: relative;
+    padding: var(--space-3);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.feature-list li:hover {
+    transform: translateY(-1px);
+}
+
+.feature-list li .feature-detail {
+    display: none;
+    margin-top: 0.5rem;
+    color: #111;
+    font-size: 0.95rem;
+}
+
+.feature-indicator {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.feature-list li.expanded .feature-indicator {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.feature-list li.expanded .feature-detail {
+    display: block;
+}
+
+.pros-list li {
+    background: #e6f7ea;
+    border: 1px solid #c5ebcf;
+    color: #1f5d2f;
+}
+
+.cons-list li {
+    background: #fdecea;
+    border: 1px solid #f2c0b0;
+    color: #8b1c1c;
+}
+
+.pros-section h3,
+.cons-section h3 {
+    margin-bottom: var(--space-2);
 }
 
 /* RATING */
