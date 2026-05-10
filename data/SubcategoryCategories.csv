@@ -1,24 +1,11 @@
 Subcategory,Category
-Conversational,GenAI
-Text Generation,GenAI
-Reasoning,GenAI
-Productivity,Productivity
-Coding,Developer Tools
- Image generator, Image generator
-Creative, Image generator
-Multimodal,GenAI
-Search,Search AI
-Video Editing,Video generator
-Video Generation,Video generator
-Open Source,GenAI
-Writing,Productivity
-Content Generation,Marketing AI
-Marketing,Marketing AI
-Avatar,Video generator
-Art, Image generator
-Collaboration,Developer Tools
-Design,Design AI
-Content Creation,Design AI
-Presentation,Video generator
-Voice Synthesis,Voice AI
-Audio,Voice AI
+Presentation generator,Visual Content
+Video generator,Visual Content
+Image generator,Visual Content
+Writing support,Communication
+Speech support,Communication
+Translation support,Communication
+Lesson plans,Lesson Planning
+Quiz & worksheet generation,Lesson Planning
+Adapting texts,Differentiation
+Adjusting exercises,Differentiation
