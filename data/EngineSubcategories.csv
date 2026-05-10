@@ -9,17 +9,17 @@ Midjourney,Image generator
 Stable Diffusion,Image generator
 Leonardo AI,Image generator
 ChatGPT,Writing support
-ChatGPT,Lesson plans
+ChatGPT,Lesson plan generator
 ChatGPT,Adapting texts
 Claude Opus,Writing support
-Claude Opus,Lesson plans
+Claude Opus,Lesson plan generator
 Claude Opus,Adapting texts
 Gemini,Writing support
-Gemini,Lesson plans
+Gemini,Lesson plan generator
 Mistral,Writing support
 Perplexity,Writing support
 Jasper,Writing support
-Jasper,Quiz & worksheet generation
+Jasper,Exercise generator
 Jasper,Adapting texts
 Jasper,Adjusting exercises
 Notion AI,Writing support
@@ -29,8 +29,8 @@ Copilot,Writing support
 Cursor,Writing support
 Replit AI,Writing support
 DeepSeek,Writing support
-DeepSeek,Lesson plans
+DeepSeek,Lesson plan generator
 Diffit,Adapting texts
 Diffit,Adjusting exercises
-Twee,Lesson plans
-Twee,Quiz & worksheet generation
+Twee,Lesson plan generator
+Twee,Exercise generator
