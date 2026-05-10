@@ -25,17 +25,47 @@
             <a id="engineLink" target="_blank"></a>
         </div>
 
-        <div class="subcategories-list">
+                <div class="subcategories-list">
             <h3>Subcategories:</h3>
             <ul id="subcategories"></ul>
         </div>
 
         <div class="description-box" id="engineDescription"></div>
+        <div class="rating-panel">
+            <div class="rating-summary">
+                <span id="averageScore">- / 5</span>
+                <span id="ratingCount">(No comments yet)</span>
+            </div>
+            <form id="ratingForm" class="rating-form">
+                <label for="score">Give a score:</label>
+                <select id="score" required>
+                    <option value="">Choose...</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <label for="comment">Comment:</label>
+                <textarea id="comment" rows="4" placeholder="Enter your feedback here..."></textarea>
+                <button type="submit">Submit</button>
+                <div id="ratingMessage" class="rating-message"></div>
+            </form>
+            <div class="comments-section">
+                <h3>Comments</h3>
+                <div id="commentsList" class="comments-list"></div>
+            </div>
+        </div>
+
+
 
 
 
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
     <script src="js/data.js"></script>
     <script src="js/engine.js"></script>
 
