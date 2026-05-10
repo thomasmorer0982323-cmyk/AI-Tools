@@ -1,6 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<script>
+window.addEventListener("scroll", function () {
+    const navbar = document.querySelector(".topbar");
+
+    if (window.scrollY > 20) {
+        navbar.classList.add("scrolled");
+    } else {
+        navbar.classList.remove("scrolled");
+    }
+});
+</script>
+
+<body>
+
+<nav class="topbar">
+    <a href="index.html" class="logo">Home</a>
+
+    <input type="text" class="search" placeholder="Search...">
+
+    <button class="nav-button">Button</button>
+</nav>
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Categories</title>
