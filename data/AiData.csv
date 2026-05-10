@@ -1,23 +1,24 @@
-Engine,weblink,imagelink,description
-ChatGPT,https://chat.openai.com,chatgpt.png,Advanced conversational AI from OpenAI.
-Claude Opus,https://claude.ai,claude.png,Anthropic's powerful AI assistant.
-Copilot,https://copilot.microsoft.com,copilot.png,Microsoft AI productivity assistant.
-DALL-E,https://openai.com/dall-e,dalle.png,AI Image generator engine from OpenAI.
-Midjourney,https://www.midjourney.com,midjourney.png,Creative AI Image generator platform.
-Gemini,https://gemini.google.com,gemini.png,Google's multimodal AI assistant.
-Perplexity,https://www.perplexity.ai,perplexity.png,AI-powered conversational search engine.
-Runway,https://runwayml.com,runway.png,AI video editing and generation suite.
-Stable Diffusion,https://stability.ai,stable_diffusion.png,Open-source AI Image generator model.
-Notion AI,https://www.notion.so/product/ai,notion_ai.png,AI-enhanced workspace and writing assistant.
-Jasper,https://www.jasper.ai,jasper.png,AI content generation for marketing teams.
-Synthesia,https://www.synthesia.io,synthesia.png,AI avatar and video generation platform.
-Leonardo AI,https://leonardo.ai,leonardo.png,AI art and game asset creation platform.
-Mistral,https://mistral.ai,mistral.png,European open-weight AI models provider.
-DeepSeek,https://www.deepseek.com,deepseek.png,Advanced reasoning-focused AI assistant.
-Cursor,https://cursor.com,cursor.png,AI-powered code editor for developers.
-Replit AI,https://replit.com,replit.png,Collaborative coding platform with AI features.
-HeyGen,https://www.heygen.com,heygen.png,AI talking avatars and presentation videos.
-ElevenLabs,https://elevenlabs.io,elevenlabs.png,AI voice synthesis and dubbing platform.
-Diffit,https://www.diffit.com,diffit.png,AI-powered text adaptation and rewriting tool.
-Twee,https://www.twee.com,chatgpt.png,AI lesson planning and educational content generator.
-Drie,https://www.drie.com,drie.jpeg,AI lesson planning and educational content generator.
+Engine,weblink,imagelink,description,Pros,Cons
+ChatGPT,https://chat.openai.com,chatgpt.png,Advanced conversational AI from OpenAI.,Available 24/7;Fast answers;Ai tool usable for almost everything,"Limited usage per day;Answers are based on training data and may not always be fully accurate or up to date
+"
+Claude Opus,https://claude.ai,claude.png,Anthropic's powerful AI assistant.,,
+Copilot,https://copilot.microsoft.com,copilot.png,Microsoft AI productivity assistant.,,
+DALL-E,https://openai.com/dall-e,dalle.png,AI Image generator engine from OpenAI.,,
+Midjourney,https://www.midjourney.com,midjourney.png,Creative AI Image generator platform.,,
+Gemini,https://gemini.google.com,gemini.png,Google's multimodal AI assistant.,,
+Perplexity,https://www.perplexity.ai,perplexity.png,AI-powered conversational search engine.,,
+Runway,https://runwayml.com,runway.png,AI video editing and generation suite.,,
+Stable Diffusion,https://stability.ai,stable_diffusion.png,Open-source AI Image generator model.,,
+Notion AI,https://www.notion.so/product/ai,notion_ai.png,AI-enhanced workspace and writing assistant.,,
+Jasper,https://www.jasper.ai,jasper.png,AI content generation for marketing teams.,,
+Synthesia,https://www.synthesia.io,synthesia.png,AI avatar and video generation platform.,,
+Leonardo AI,https://leonardo.ai,leonardo.png,AI art and game asset creation platform.,,
+Mistral,https://mistral.ai,mistral.png,European open-weight AI models provider.,,
+DeepSeek,https://www.deepseek.com,deepseek.png,Advanced reasoning-focused AI assistant.,,
+Cursor,https://cursor.com,cursor.png,AI-powered code editor for developers.,,
+Replit AI,https://replit.com,replit.png,Collaborative coding platform with AI features.,,
+HeyGen,https://www.heygen.com,heygen.png,AI talking avatars and presentation videos.,,
+ElevenLabs,https://elevenlabs.io,elevenlabs.png,AI voice synthesis and dubbing platform.,,
+Diffit,https://www.diffit.com,diffit.png,AI-powered text adaptation and rewriting tool.,Can adapt text to different reading levels;Can Generate questions and vocabulary from texts that u upload;Helps create differentiated materials,"Mainly focused on reading/text activities, less variety in skills;Not all features are free;Limited creativity compared to general AI tools"
+Twee,https://www.twee.com,twee.png,AI lesson planning and educational content generator.,It has a list of grammar rules for specific topics;It already has pre-written lesson plans;Already made exercises,Mostly English;Most features need to be paid for
+Drie,https://www.drie.com,drie.jpeg,AI lesson planning and educational content generator.,,
