@@ -1,5 +1,5 @@
 function goBack() {
-    window.location.href = "index.html";
+    window.history.back();
 }
 
 const params = new URLSearchParams(window.location.search);
