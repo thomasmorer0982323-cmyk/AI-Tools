@@ -57,7 +57,7 @@ function renderFeatureList(rawValue, listId, itemClass) {
     if (!rawValue) {
         const emptyItem = document.createElement('li');
         emptyItem.className = itemClass;
-        emptyItem.textContent = 'Geen items beschikbaar.';
+        emptyItem.textContent = 'No items available.';
         list.appendChild(emptyItem);
         return;
     }
@@ -101,7 +101,7 @@ Promise.all([loadAiData(), loadSubcategoryCategories(), loadEngineSubcategories(
     );
 
     const categories = getEngineCategories(engineName, subcatCats, engineSubcats);
-    document.getElementById("categoryName").innerText = categories.length ? categories.join(', ') : 'Geen categorie';
+    document.getElementById("categoryName").innerText = categories.length ? categories.join(', ') : 'No category';
 
     document.getElementById("engineName").innerText =
         engine.Engine;
