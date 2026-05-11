@@ -480,7 +480,7 @@ a:hover {
 }
 
 .website-link a {
-    color: #ffffff;
+    color: #ff8400;
     font-size: 18px;
     text-decoration: none;
 }
@@ -501,15 +501,33 @@ a:hover {
 
 .footer-content {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+/* THE LINE */
+.footer-line {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #ff7016, #ff9100c3, #ff7016);
+    border-radius: 2px;
+}
+
+/* TEXT NEXT TO EACH OTHER */
+.footer-text {
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-5);
+    flex-wrap: wrap;
+    text-align: center;
 }
 
 .footer-logo {
-    width: 120px;
+    width: 100px;
     height: auto;
+    display: block;
 }
 
 /* ANIMATION */
@@ -528,4 +546,8 @@ a:hover {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.divider {
+  color: orange;
 }
