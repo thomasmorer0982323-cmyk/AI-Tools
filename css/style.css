@@ -371,14 +371,14 @@ a:hover {
     padding: 10px 22px;
     border: none;
     border-radius: 999px;
-    background: #2a7ae2;
+    background: #ff840a;
     color: white;
     cursor: pointer;
     font-weight: 700;
 }
 
 .rating-form button:hover {
-    background: #2563c5;
+    background: #ff7301d4;
 }
 
 .rating-message {
