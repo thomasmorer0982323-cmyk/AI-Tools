@@ -17,12 +17,6 @@ Gemini,Writing support
 Gemini,Lesson plan generator
 Mistral,Writing support
 Perplexity,Writing support
-Jasper,Writing support
-Jasper,Exercise generator
-Jasper,Adapting texts
-Jasper,Adjusting exercises
-Notion AI,Writing support
-Notion AI,Adapting texts
 ElevenLabs,Speech support
 Copilot,Writing support
 Cursor,Writing support
@@ -48,3 +42,5 @@ Pika,Video generator
 Vivago AI,Video generator
 EaseMate AI,Video generator 
 PixVerse,Video generator
+Kira,Adapting texts
+LessonUp,Adapting texts
