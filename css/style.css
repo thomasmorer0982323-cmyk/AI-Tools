@@ -246,11 +246,11 @@ a:hover {
 }
 
 .textbox.pros-textbox {
-    animation: left_to_right 1.2s ease both;
+    animation: left_to_right 2s ease both;
 }
 
 .textbox.cons-textbox {
-    animation: right_to_left 1.2s ease both;
+    animation: right_to_left 2s ease both;
 }
 
 @keyframes left_to_right {
