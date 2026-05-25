@@ -125,3 +125,15 @@ document.getElementById('searchInput').addEventListener('keypress', (e) => {
         }
     }
 });
+
+const toggles = document.querySelectorAll('[data-target]');
+toggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+        const targetId = toggle.getAttribute('data-target');
+        const details = document.getElementById(targetId);
+        if (!details) return;
+        details.classList.toggle('hidden');
+        const isPros = targetId === 'prosDetails';
+        toggle.title = details.classList.contains('hidden') ? `Show more ${isPros ? 'pros' : 'cons'}` : `Hide ${isPros ? 'pros' : 'cons'} details`;
+    });
+});
