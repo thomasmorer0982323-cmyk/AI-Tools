@@ -272,7 +272,7 @@ a:hover {
 
 .feature-list li {
     position: relative;
-    padding: var(--space-3);
+    padding: var(--space-3) var(--space-4);
     border-radius: 12px;
     cursor: pointer;
     transition: transform 0.15s ease, background 0.2s ease;
@@ -349,6 +349,8 @@ a:hover {
     display: grid;
     gap: var(--space-3);
     margin-bottom: var(--space-4);
+    /* width: min(360px, 100%); */
+    margin-left: auto;
 }
 
 .rating-form label {
@@ -359,6 +361,7 @@ a:hover {
 .rating-form select,
 .rating-form textarea {
     width: 100%;
+    box-sizing: border-box;
     padding: var(--space-3);
     border-radius: 12px;
     border: 1px solid #ddd;
