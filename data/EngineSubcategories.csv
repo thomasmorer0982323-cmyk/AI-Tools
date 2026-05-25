@@ -8,6 +8,7 @@ DALL-E free,Image generator
 Midjourney,Image generator
 Leonardo AI,Image generator
 ChatGPT,Writing support
+ChatGPT,AI-chatbots
 ChatGPT,Lesson plan generator
 ChatGPT,Adapting texts
 Claude Opus,Writing support
@@ -15,17 +16,22 @@ Claude Opus,Lesson plan generator
 Claude Opus,Adapting texts
 Gemini,Writing support
 Gemini,Lesson plan generator
+Gemini,AI-chatbots
 Mistral,Writing support
+Mistral,AI-chatbots
 Perplexity,Writing support
+Perplexity,AI-chatbots
 ElevenLabs,Speech support
 Copilot,Writing support
+Copilot,AI-chatbots
 Cursor,Writing support
 Replit AI,Writing support
 DeepSeek,Writing support
 DeepSeek,Lesson plan generator
+DeepSeek,AI-chatbots
 Diffit,Adapting texts
-Diffit,Adjusting exercises
-Twee,Adjusting exercises
+Diffit,Generating exercises
+Twee,Generating exercises
 Visme,Presentation generator
 Gamma,Presentation generator
 Prezi,Presentation generator
@@ -51,12 +57,12 @@ CoGrader,Adapting texts
 Knowt,Adapting texts
 Teacher Quill,Adapting texts
 Blueye,Adapting texts
-TeachTools,Adjusting exercises
-LessonOrca,Adjusting exercises
-Worksheet Wizard,Adjusting exercises
-Quizgecko,Adjusting exercises
-WorksheetZone,Adjusting exercises
-StudyGlenAI,Adjusting exercises
+TeachTools,Generating exercises
+LessonOrca,Generating exercises
+Worksheet Wizard,Generating exercises
+Quizgecko,Generating exercises
+WorksheetZone,Generating exercises
+StudyGlenAI,Generating exercises
 Grammarly,Writing support
 DeepL,Writing support
 QuillBot,Writing support
