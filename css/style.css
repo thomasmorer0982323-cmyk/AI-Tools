@@ -655,3 +655,50 @@ a:hover {
 .divider {
   color: orange;
 }
+
+.ai-categories-section {
+    position: relative;
+    background-image: url("../images/useofai.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    padding: 60px 20px;
+
+    /* IMPORTANT: keeps layout stable */
+    overflow: hidden;
+}
+
+.ai-categories-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: rgba(255, 255, 255, 0.5);
+
+    z-index: 0;
+}
+
+.ai-categories-section > * {
+    position: relative;
+    z-index: 1;
+}
+
+.ai-categories-section h2 {
+    color: rgba(255, 106, 0, 0.553);
+
+    margin: 0 auto 60px auto;
+
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 28px;
+
+    display: block;
+    width: fit-content;
+
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 10px 20px;
+    border-radius: 6px;
+}
