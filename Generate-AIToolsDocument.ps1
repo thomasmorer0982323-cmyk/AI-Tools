@@ -28,6 +28,10 @@ Path to the generated RTF output file. Default is .\AI-Tools-Export.rtf
 .PARAMETER LocalPageBaseUrl
 Base URL used to build the AIEngine.html subcategory detail link.
 Default is https://thomasmorer0982323-cmyk.github.io/AI-Tools
+
+.PARAMETER ImagesFolder
+Path to the folder that contains the main engine images.
+Default is .\images
 #>
 [CmdletBinding()]
 param(
@@ -47,7 +51,10 @@ param(
     [string]$OutputRtf = ".\AI-Tools-Export.rtf",
 
     [Parameter(Mandatory=$false)]
-    [string]$LocalPageBaseUrl = "https://thomasmorer0982323-cmyk.github.io/AI-Tools"
+    [string]$LocalPageBaseUrl = "https://thomasmorer0982323-cmyk.github.io/AI-Tools",
+
+    [Parameter(Mandatory=$false)]
+    [string]$ImagesFolder = ".\images"
 )
 
 function ThrowIfMissingFile([string]$path) {
@@ -65,10 +72,53 @@ function Escape-RtfText([string]$text) {
     return $normalized -replace "`r?`n", '\line '
 }
 
-function Add-RtfHyperlink([string]$target, [string]$display) {
+function Get-RtfHyperlinkField([string]$target, [string]$display) {
     $escapedTarget = Escape-RtfText($target)
     $escapedDisplay = Escape-RtfText($display)
-    return '{\field{\*\fldinst{HYPERLINK "' + $escapedTarget + '"}}{\fldrslt{\cf1\ul ' + $escapedDisplay + '\ulnone\cf0}}}\par'
+    return '{\field{\*\fldinst{HYPERLINK "' + $escapedTarget + '"}}{\fldrslt{\cf1\ul ' + $escapedDisplay + '\ulnone\cf0}}}'
+}
+
+function Add-RtfHyperlink([string]$target, [string]$display) {
+    return (Get-RtfHyperlinkField $target $display) + '\par'
+}
+
+function Add-RtfLine([string]$text, [string]$prefix = '') {
+    return $prefix + (Escape-RtfText($text)) + '\line'
+}
+
+function Add-RtfImage([string]$imagePath, [int]$maxWidthTwips = 1800, [int]$maxHeightTwips = 1350) {
+    if ([string]::IsNullOrWhiteSpace($imagePath) -or -not (Test-Path -Path $imagePath -PathType Leaf)) {
+        return ''
+    }
+
+    $extension = [System.IO.Path]::GetExtension($imagePath).ToLowerInvariant()
+    $blipTag = switch ($extension) {
+        '.png' { '\pngblip' }
+        '.jpg' { '\jpegblip' }
+        '.jpeg' { '\jpegblip' }
+        default { return '' }
+    }
+
+    $image = $null
+    try {
+        Add-Type -AssemblyName System.Drawing -ErrorAction SilentlyContinue | Out-Null
+        $image = [System.Drawing.Image]::FromFile($imagePath)
+        $originalWidthTwips = [double]$image.Width * 15
+        $originalHeightTwips = [double]$image.Height * 15
+        $scale = [Math]::Min(1.0, [Math]::Min($maxWidthTwips / $originalWidthTwips, $maxHeightTwips / $originalHeightTwips))
+        $targetWidthTwips = [Math]::Max(1, [int][Math]::Round($originalWidthTwips * $scale))
+        $targetHeightTwips = [Math]::Max(1, [int][Math]::Round($originalHeightTwips * $scale))
+        $hexBytes = -join ([System.IO.File]::ReadAllBytes($imagePath) | ForEach-Object { $_.ToString('x2') })
+        return '{\pard\ql{\pict' + $blipTag + '\picw' + $image.Width + '\pich' + $image.Height + '\picwgoal' + $targetWidthTwips + '\pichgoal' + $targetHeightTwips + ' ' + $hexBytes + '}\par}'
+    }
+    catch {
+        return ''
+    }
+    finally {
+        if ($image) {
+            $image.Dispose()
+        }
+    }
 }
 
 function Strip-Html([string]$html) {
@@ -213,30 +263,30 @@ $rtfLines += '{\colortbl;\red0\green0\blue255;}'
 $rtfLines += '\viewkind4\uc1\pard\sa180\sl276\slmult1\f0\fs24'
 $rtfLines += '\pard\qc\sb240\sa240\b\fs44 AI Tools for Language Teaching\b0\fs24\par'
 $rtfLines += '\pard\qr\i Generated on: ' + (Get-Date -Format "yyyy-MM-dd HH:mm") + '\i0\par\par'
-$rtfLines += '\pard\qc\b\fs30 Website Introduction\b0\fs24\par\par'
-$rtfLines += '\pard\ql\sb180\sa180\b\fs32 Welcome\b0\fs24\par'
-$rtfLines += Escape-RtfText($welcomeText) + '\par\par'
-$rtfLines += '\b Advantages of AI in language education\b0\line'
-$rtfLines += Escape-RtfText($prosText) + '\par\par'
-$rtfLines += '\b Disadvantages of AI in language education\b0\line'
-$rtfLines += Escape-RtfText($consText) + '\par\par\page'
+$rtfLines += '\pard\ql\b\fs30 Website Introduction\b0\fs24\par\par'
+$rtfLines += '\pard\ql\sb120\sa120\b\fs32 Welcome\b0\fs24\par\par'
+$rtfLines += '\pard\ql\li0\fi0 ' + (Escape-RtfText($welcomeText)) + '\par\par'
+$rtfLines += '\pard\ql\sb120\sa120\b Advantages of AI in language education\b0\par\par'
+$rtfLines += '\pard\ql\li0\fi0 ' + (Escape-RtfText($prosText)) + '\par\par'
+$rtfLines += '\pard\ql\sb120\sa120\b Disadvantages of AI in language education\b0\par\par'
+$rtfLines += '\pard\ql\li0\fi0 ' + (Escape-RtfText($consText)) + '\par\par\page'
 
 $rtfLines += '\pard\qc\b\fs36 Table of Contents\b0\fs24\par\par'
 foreach ($line in $tocEntries) {
     if ($line -match '^\d+\. ') {
         # Category
-        $rtfLines += '\pard\b\fs28 ' + (Escape-RtfText($line)) + '\b0\fs24\par\par'
+        $rtfLines += Add-RtfLine $line '\pard\b\fs28 '
     }
     elseif ($line -match '^\s+\d+\.\d+') {
         # Subcategory
-        $rtfLines += '\pard\li360 ' + (Escape-RtfText($line.Trim())) + '\par'
+        $rtfLines += Add-RtfLine ($line.Trim()) '\pard\li360 '
     }
     else {
         # Engine/tool
-        $rtfLines += '\pard\li720\sa120 ' + (Escape-RtfText($line.Trim())) + '\par'
+        $rtfLines += Add-RtfLine ($line.Trim()) '\pard\li720\sa120 '
     }
 }
-$rtfLines += '\page'
+$rtfLines += '\par\page'
 
 $categoryIndex = 0
 foreach ($category in $categoryOrder) {
@@ -255,29 +305,39 @@ foreach ($category in $categoryOrder) {
             $engineNumber = "$subNumber.$engineIndex"
             if (-not $seenEngine.ContainsKey($engine)) {
                 $seenEngine[$engine] = [PSCustomObject]@{ Category = $category; Subcategory = $sub; Number = $engineNumber }
-                $rtfLines += '\pard\sb120\sa120\b\fs26 ' + (Escape-RtfText("$engineNumber $engine")) + '\b0\fs24\par'
                 $engineData = Find-EngineData $engine
                 if ($null -eq $engineData) {
+                    $rtfLines += '\pard\sb120\sa120\b\fs26 ' + (Escape-RtfText("$engineNumber $engine")) + '\b0\fs24\par'
                     $rtfLines += Escape-RtfText("Details for '$engine' were not found in $AiDataCsv.") + '\par'
                 } else {
-                    $website = if ($engineData.weblink) { $engineData.weblink.Trim() } else { 'N/A' }
+                    $website = if ($engineData.weblink) { $engineData.weblink.Trim() } else { '' }
                     $description = if ($engineData.description) { $engineData.description.Trim() } else { '' }
                     $prosItems = @()
                     if ($engineData.Pros) { $prosItems = ($engineData.Pros -split ';') | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' } }
                     $consItems = @()
                     if ($engineData.Cons) { $consItems = ($engineData.Cons -split ';') | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' } }
                     $ratings = if ($engineData.Ratings) { $engineData.Ratings.Trim() } else { '' }
-
-                    $rtfLines += Escape-RtfText("Website: $website") + '\par'
                     $toolUrl = "$($LocalPageBaseUrl.TrimEnd('/'))/AIEngine.html?engine=$([uri]::EscapeDataString($engine))&from=subcat&subcategory=$([uri]::EscapeDataString($sub))&category=$([uri]::EscapeDataString($category))"
-                    $rtfLines += Add-RtfHyperlink $toolUrl $engine
+                    $headerLinkTarget = if ($website) { $website } else { $toolUrl }
+                    $rtfLines += '\pard\sb120\sa120\b\fs26 ' + (Escape-RtfText("$engineNumber ")) + (Get-RtfHyperlinkField $headerLinkTarget $engine) + '\b0\fs24\par'
+                    if ($website) {
+                        $rtfLines += '\pard\ql Website: ' + (Get-RtfHyperlinkField $website $website) + '\par'
+                    }
+
+                    $imagePath = if ($engineData.imagelink) { Join-Path -Path $ImagesFolder -ChildPath $engineData.imagelink.Trim() } else { '' }
+                    $imageRtf = Add-RtfImage $imagePath
+                    if ($imageRtf) {
+                        $rtfLines += $imageRtf
+                        $rtfLines += '\par'
+                    }
+
                     if ($description) {
                         $rtfLines += '\pard\ql\i ' + (Escape-RtfText("Description: $description")) + '\i0\par'
                     }
                     if ($prosItems.Count -gt 0) {
-                        $rtfLines += '\par\b Cons:\b0\par\par'
-                        foreach ($item in $consItems) {
-                            $rtfLines += '\pard\li360\sa120 ' + Escape-RtfText("• $item") + '\par'
+                        $rtfLines += '\par\b Pros:\b0\par'
+                        foreach ($item in $prosItems) {
+                            $rtfLines += Add-RtfLine "• $item" '\pard\li360\sa120 '
                         }
                         $rtfLines += '\par'
                     } else {
@@ -286,8 +346,9 @@ foreach ($category in $categoryOrder) {
                     if ($consItems.Count -gt 0) {
                         $rtfLines += '\b Cons:\b0\par'
                         foreach ($item in $consItems) {
-                            $rtfLines += Escape-RtfText("• $item") + '\line '
+                            $rtfLines += Add-RtfLine "• $item" '\pard\li360\sa120 '
                         }
+                        $rtfLines += '\par'
                     } else {
                         $rtfLines += '\b Cons:\b0 N/A\par'
                     }
