@@ -574,6 +574,11 @@ a:hover {
 }
 
 /* IMAGE */
+.engine-slideshow {
+    display: flex;
+    justify-content: center;
+}
+
 .engine-image {
     display: block;
     margin: var(--space-4) auto;

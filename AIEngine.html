@@ -22,13 +22,18 @@
 
         <h1 id="engineName"></h1>
 
-        <img id="engineImage" class="engine-image">
+        <div id="engineSlideshow" class="engine-slideshow hidden" aria-live="polite">
+            <div class="engine-slideshow-stage">
+                <img id="engineImageCurrent" class="engine-image engine-image-layer is-active" alt="">
+                <img id="engineImageNext" class="engine-image engine-image-layer" alt="">
+            </div>
+        </div>
 
         <div class="website-link">
             <a id="engineLink" target="_blank"></a>
         </div>
 
-                <div class="subcategories-list">
+        <div class="subcategories-list">
             <h3>Subcategories:</h3>
             <ul id="subcategories"></ul>
         </div>

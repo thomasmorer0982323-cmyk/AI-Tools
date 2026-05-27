@@ -90,6 +90,160 @@ function renderFeatureList(rawValue, listId, itemClass) {
     });
 }
 
+let slideshowInterval;
+let slideshowAnimationTimeout;
+
+const slideshowExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
+const slideshowDisplayMs = 2000;
+const slideshowTransitionMs = 2000;
+const maxSlideshowImages = 12;
+
+function normalizeImageBaseName(filename) {
+    return filename
+        .replace(/\.[^.]+$/, '')
+        .replace(/\d+$/, '')
+        .replace(/[^a-z0-9]+/gi, '')
+        .toLowerCase();
+}
+
+function getEngineImagePrefixes(engineTitle) {
+    const rawValue = (engineTitle || '').trim().toLowerCase();
+    const compactValue = rawValue.replace(/[^a-z0-9]+/g, '');
+    const underscoreValue = rawValue.replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+    const hyphenValue = rawValue.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+    return [...new Set([compactValue, underscoreValue, hyphenValue].filter(Boolean))];
+}
+
+function probeImage(src) {
+    return new Promise(resolve => {
+        const image = new Image();
+        image.onload = () => resolve(true);
+        image.onerror = () => resolve(false);
+        image.src = src;
+    });
+}
+
+async function findExistingImage(prefix, suffix) {
+    for (const extension of slideshowExtensions) {
+        const candidate = `imagesSlideshow/${prefix}${suffix}.${extension}`;
+        if (await probeImage(candidate)) {
+            return candidate;
+        }
+    }
+
+    return null;
+}
+
+async function discoverSlideshowImages(engineTitle) {
+    const prefixes = getEngineImagePrefixes(engineTitle);
+    const discoveredImages = [];
+    const seenImages = new Set();
+
+    for (const prefix of prefixes) {
+        const baseImage = await findExistingImage(prefix, '');
+        if (baseImage && !seenImages.has(baseImage)) {
+            seenImages.add(baseImage);
+            discoveredImages.push(baseImage);
+        }
+
+        for (let index = 1; index <= maxSlideshowImages; index += 1) {
+            const numberedImage = await findExistingImage(prefix, String(index));
+            if (!numberedImage) {
+                if (index > 1) {
+                    break;
+                }
+                continue;
+            }
+
+            if (!seenImages.has(numberedImage)) {
+                seenImages.add(numberedImage);
+                discoveredImages.push(numberedImage);
+            }
+        }
+    }
+
+    return discoveredImages;
+}
+
+function resetSlideshowLayer(imageElement) {
+    imageElement.className = 'engine-image engine-image-layer';
+}
+
+function setSlideshowImage(imageElement, imageSrc, engineTitle, imageNumber) {
+    imageElement.src = imageSrc;
+    imageElement.alt = `${engineTitle} image ${imageNumber}`;
+}
+
+async function setupEngineSlideshow(engineTitle) {
+    const slideshow = document.getElementById('engineSlideshow');
+    let currentImage = document.getElementById('engineImageCurrent');
+    let nextImage = document.getElementById('engineImageNext');
+
+    if (!slideshow || !currentImage || !nextImage || !engineTitle) {
+        return;
+    }
+
+    if (slideshowInterval) {
+        clearTimeout(slideshowInterval);
+        slideshowInterval = null;
+    }
+
+    if (slideshowAnimationTimeout) {
+        clearTimeout(slideshowAnimationTimeout);
+        slideshowAnimationTimeout = null;
+    }
+
+    const matchingImages = await discoverSlideshowImages(engineTitle);
+
+    if (!matchingImages.length) {
+        slideshow.classList.add('hidden');
+        currentImage.removeAttribute('src');
+        nextImage.removeAttribute('src');
+        currentImage.alt = '';
+        nextImage.alt = '';
+        return;
+    }
+
+    let currentIndex = 0;
+    resetSlideshowLayer(currentImage);
+    resetSlideshowLayer(nextImage);
+    setSlideshowImage(currentImage, matchingImages[currentIndex], engineTitle, currentIndex + 1);
+    currentImage.classList.add('is-active');
+    slideshow.classList.remove('hidden');
+
+    if (matchingImages.length === 1) {
+        return;
+    }
+
+    const queueNextSlide = () => {
+        slideshowInterval = window.setTimeout(() => {
+            const nextIndex = (currentIndex + 1) % matchingImages.length;
+            resetSlideshowLayer(currentImage);
+            resetSlideshowLayer(nextImage);
+            setSlideshowImage(nextImage, matchingImages[nextIndex], engineTitle, nextIndex + 1);
+            currentImage.classList.add('is-active');
+            nextImage.classList.add('is-next');
+
+            requestAnimationFrame(() => {
+                currentImage.classList.add('slide-out-left');
+                nextImage.classList.add('slide-in-right');
+            });
+
+            slideshowAnimationTimeout = window.setTimeout(() => {
+                resetSlideshowLayer(currentImage);
+                resetSlideshowLayer(nextImage);
+                nextImage.classList.add('is-active');
+                currentIndex = nextIndex;
+                [currentImage, nextImage] = [nextImage, currentImage];
+                queueNextSlide();
+            }, slideshowTransitionMs);
+        }, slideshowDisplayMs);
+    };
+
+    queueNextSlide();
+}
+
 const params = new URLSearchParams(window.location.search);
 
 const engineName = params.get("engine");
@@ -106,8 +260,7 @@ Promise.all([loadAiData(), loadSubcategoryCategories(), loadEngineSubcategories(
     document.getElementById("engineName").innerText =
         engine.Engine;
 
-    document.getElementById("engineImage").src =
-        `images/${engine.imagelink}`;
+    await setupEngineSlideshow(engine.Engine);
 
     document.getElementById("engineLink").href =
         engine.weblink;
