@@ -123,9 +123,11 @@ function Add-RtfImage([string]$imagePath, [int]$maxWidthTwips = 1800, [int]$maxH
 
 function Strip-Html([string]$html) {
     if ($null -eq $html) { return "" }
-    $cleanHtml = $html -replace '<[^>]+>', ''
+    $htmlWithBreaks = $html -replace '(?i)</p\s*>', "`r`n" -replace '(?i)<br\s*/?>', "`r`n" -replace '(?i)</div\s*>', "`r`n"
+    $cleanHtml = $htmlWithBreaks -replace '<[^>]+>', ''
     $text = [System.Net.WebUtility]::HtmlDecode($cleanHtml)
-    return $text -replace '^[\s\r\n]+|[\s\r\n]+$',''
+    $lines = ($text -split "`r?`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' })
+    return ($lines -join "`r`n")
 }
 
 ThrowIfMissingFile $AiDataCsv
@@ -274,16 +276,19 @@ $rtfLines += '\pard\ql\li0\fi0 ' + (Escape-RtfText($consText)) + '\par\par\page'
 $rtfLines += '\pard\qc\b\fs36 Table of Contents\b0\fs24\par\par'
 foreach ($line in $tocEntries) {
     if ($line -match '^\d+\. ') {
-        # Category
-        $rtfLines += Add-RtfLine $line '\pard\b\fs28 '
+        # Category: 1. Category Name
+        $rtfLines += '\line' + (Add-RtfLine $line '\pard\li0\b\fs28 ') + '\line'
     }
-    elseif ($line -match '^\s+\d+\.\d+') {
-        # Subcategory
-        $rtfLines += Add-RtfLine ($line.Trim()) '\pard\li360 '
+    elseif ($line -match '^\s+\d+\.\d+\s') {
+        # Subcategory:     1.1 Subcategory Name
+        $rtfLines += '\line' + (Add-RtfLine ($line.Trim()) '\pard\li240 ') + '\line'
+    }
+    elseif ($line -match '^\s+\d+\.\d+\.\d+\s') {
+        # Engine/tool:         1.1.1 Engine Name
+        $rtfLines += Add-RtfLine ($line.Trim()) '\pard\li480\sa120 '
     }
     else {
-        # Engine/tool
-        $rtfLines += Add-RtfLine ($line.Trim()) '\pard\li720\sa120 '
+        $rtfLines += Add-RtfLine ($line.Trim()) '\pard\li480\sa120 '
     }
 }
 $rtfLines += '\par\page'
@@ -293,12 +298,12 @@ foreach ($category in $categoryOrder) {
     $categoryIndex++
     $subcategoryIndex = 0
     $rtfLines += '\page'
-    $rtfLines += '\pard\sb240\sa240\b\fs36 ' + (Escape-RtfText("$categoryIndex. $category")) + '\b0\fs24\par\par'
+    $rtfLines += '\pard\sb520\sa420\b\fs36 ' + (Escape-RtfText("$categoryIndex. $category")) + '\b0\fs24\par\par\par'
     $subs = $categoryStructures[$category].Keys | Sort-Object { $subcategoryOrder[$_] }
     foreach ($sub in $subs) {
         $subcategoryIndex++
         $subNumber = "$categoryIndex.$subcategoryIndex"
-        $rtfLines += '\pard\sb180\sa180\b\fs30 ' + (Escape-RtfText("$subNumber $sub")) + '\b0\fs24\par'
+        $rtfLines += '\pard\sb320\sa280\b\fs30 ' + (Escape-RtfText("$subNumber $sub")) + '\b0\fs24\par\par'
         $engineIndex = 0
         foreach ($engine in $categoryStructures[$category][$sub]) {
             $engineIndex++
