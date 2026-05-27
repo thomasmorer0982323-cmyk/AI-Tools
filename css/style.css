@@ -581,16 +581,16 @@ a:hover {
 
 .engine-slideshow-stage {
     position: relative;
-    width: 250px;
-    height: 250px;
+    width: min(750px, 100%);
+    aspect-ratio: 4 / 3;
     margin: var(--space-4) auto;
     overflow: hidden;
 }
 
 .engine-image {
     display: block;
-    width: 250px;
-    height: 250px;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     background: white;
     padding: var(--space-3);

@@ -124,9 +124,9 @@ function probeImage(src) {
     });
 }
 
-async function findExistingImage(prefix, suffix) {
+async function findExistingImage(folderName, prefix, suffix) {
     for (const extension of slideshowExtensions) {
-        const candidate = `imagesSlideshow/${prefix}${suffix}.${extension}`;
+        const candidate = `${folderName}/${prefix}${suffix}.${extension}`;
         if (await probeImage(candidate)) {
             return candidate;
         }
@@ -135,20 +135,29 @@ async function findExistingImage(prefix, suffix) {
     return null;
 }
 
-async function discoverSlideshowImages(engineTitle) {
-    const prefixes = getEngineImagePrefixes(engineTitle);
+async function discoverSlideshowImages(engineTitle, imageName) {
+    const prefixes = [...new Set([
+        ...getEngineImagePrefixes(engineTitle),
+        ...getEngineImagePrefixes(normalizeImageBaseName(imageName || ''))
+    ])];
     const discoveredImages = [];
     const seenImages = new Set();
 
     for (const prefix of prefixes) {
-        const baseImage = await findExistingImage(prefix, '');
-        if (baseImage && !seenImages.has(baseImage)) {
-            seenImages.add(baseImage);
-            discoveredImages.push(baseImage);
+        const mainImage = await findExistingImage('images', prefix, '');
+        if (mainImage && !seenImages.has(mainImage)) {
+            seenImages.add(mainImage);
+            discoveredImages.push(mainImage);
+        }
+
+        const slideshowBaseImage = await findExistingImage('imagesSlideshow', prefix, '');
+        if (slideshowBaseImage && !seenImages.has(slideshowBaseImage)) {
+            seenImages.add(slideshowBaseImage);
+            discoveredImages.push(slideshowBaseImage);
         }
 
         for (let index = 1; index <= maxSlideshowImages; index += 1) {
-            const numberedImage = await findExistingImage(prefix, String(index));
+            const numberedImage = await findExistingImage('imagesSlideshow', prefix, String(index));
             if (!numberedImage) {
                 if (index > 1) {
                     break;
@@ -175,7 +184,7 @@ function setSlideshowImage(imageElement, imageSrc, engineTitle, imageNumber) {
     imageElement.alt = `${engineTitle} image ${imageNumber}`;
 }
 
-async function setupEngineSlideshow(engineTitle) {
+async function setupEngineSlideshow(engineTitle, imageName) {
     const slideshow = document.getElementById('engineSlideshow');
     let currentImage = document.getElementById('engineImageCurrent');
     let nextImage = document.getElementById('engineImageNext');
@@ -194,7 +203,7 @@ async function setupEngineSlideshow(engineTitle) {
         slideshowAnimationTimeout = null;
     }
 
-    const matchingImages = await discoverSlideshowImages(engineTitle);
+    const matchingImages = await discoverSlideshowImages(engineTitle, imageName);
 
     if (!matchingImages.length) {
         slideshow.classList.add('hidden');
@@ -260,7 +269,7 @@ Promise.all([loadAiData(), loadSubcategoryCategories(), loadEngineSubcategories(
     document.getElementById("engineName").innerText =
         engine.Engine;
 
-    await setupEngineSlideshow(engine.Engine);
+    await setupEngineSlideshow(engine.Engine, engine.imagelink);
 
     document.getElementById("engineLink").href =
         engine.weblink;
