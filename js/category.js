@@ -20,18 +20,14 @@ Promise.all([loadSubcategoryCategories(), loadEngineSubcategories()]).then(([sub
 
     subcategories.forEach(subcategory => {
 
-        const card = document.createElement("div");
+        const card = document.createElement("a");
 
         card.className = "card";
+        card.href = `AISubcat.html?subcategory=${encodeURIComponent(subcategory)}&category=${encodeURIComponent(category)}`;
 
         card.innerHTML = `
             <h3>${subcategory}</h3>
         `;
-
-        card.onclick = () => {
-            window.location.href =
-                `AISubcat.html?subcategory=${encodeURIComponent(subcategory)}&category=${encodeURIComponent(category)}`;
-        };
 
         engineList.appendChild(card);
 

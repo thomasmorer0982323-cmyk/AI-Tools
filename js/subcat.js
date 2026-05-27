@@ -38,21 +38,19 @@ Promise.all([loadAiData(), loadEngineSubcategories()]).then(([aiData, engineSubc
 
         if (engine) {
 
-            const card = document.createElement("div");
+            const card = document.createElement("a");
 
             card.className = "card";
+
+            let url = `AIEngine.html?engine=${encodeURIComponent(engine.Engine)}&from=subcat&subcategory=${encodeURIComponent(subcategory)}`;
+            if (category) {
+                url += `&category=${encodeURIComponent(category)}`;
+            }
+            card.href = url;
 
             card.innerHTML = `
                 <h3>${engine.Engine}</h3>
             `;
-
-            card.onclick = () => {
-                let url = `AIEngine.html?engine=${encodeURIComponent(engine.Engine)}&from=subcat&subcategory=${encodeURIComponent(subcategory)}`;
-                if (category) {
-                    url += `&category=${encodeURIComponent(category)}`;
-                }
-                window.location.href = url;
-            };
 
             engineList.appendChild(card);
 

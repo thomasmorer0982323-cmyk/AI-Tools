@@ -30,12 +30,10 @@ function displayCategories() {
         categoryList.innerHTML = ''; // Clear previous content
 
         categories.forEach(category => {
-            const card = document.createElement("div");
+            const card = document.createElement("a");
             card.className = "card";
+            card.href = `AICat.html?category=${encodeURIComponent(category)}`;
             card.innerText = category;
-            card.onclick = () => {
-                window.location.href = `AICat.html?category=${encodeURIComponent(category)}`;
-            };
             categoryList.appendChild(card);
         });
     });
@@ -64,8 +62,9 @@ function displaySearchResults(searchTerm) {
         }
 
         uniqueEngines.forEach(engine => {
-            const card = document.createElement("div");
+            const card = document.createElement("a");
             card.className = "card";
+            card.href = `AIEngine.html?engine=${encodeURIComponent(engine.Engine)}&from=search&search=${encodeURIComponent(searchTerm)}`;
 
             const subcats = getEngineSubcategories(engine.Engine, engineSubcats);
             const categories = getEngineCategories(engine.Engine, subcatCats, engineSubcats);
@@ -75,10 +74,6 @@ function displaySearchResults(searchTerm) {
                 <p><strong>Category:</strong> ${categories.join(', ')}</p>
                 <p><strong>Subcategories:</strong> ${subcats.join(', ')}</p>
             `;
-
-            card.onclick = () => {
-                window.location.href = `AIEngine.html?engine=${encodeURIComponent(engine.Engine)}&from=search&search=${encodeURIComponent(searchTerm)}`;
-            };
 
             categoryList.appendChild(card);
         });
