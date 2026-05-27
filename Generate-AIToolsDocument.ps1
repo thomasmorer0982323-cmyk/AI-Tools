@@ -208,21 +208,33 @@ function Render-List([string]$prefix, [string[]]$items, [string]$type) {
 
 $rtfLines = @()
 $rtfLines += '{\rtf1\ansi\deff0'
+$rtfLines += '{\fonttbl{\f0 Calibri;}{\f1 Arial;}}'
 $rtfLines += '{\colortbl;\red0\green0\blue255;}'
-$rtfLines += '\viewkind4\uc1'
-$rtfLines += '\pard\qc\b\fs40 AI Tools for Language Teaching\b0\fs24\par'
-$rtfLines += '\pard\qr Generated on: ' + (Get-Date -Format "yyyy-MM-dd HH:mm") + '\par'
-$rtfLines += '\pard\qc\b First page: website introduction \b0\line'
-$rtfLines += '\pard\ql\fs24\b Welcome\b0\line'
+$rtfLines += '\viewkind4\uc1\pard\sa180\sl276\slmult1\f0\fs24'
+$rtfLines += '\pard\qc\sb240\sa240\b\fs44 AI Tools for Language Teaching\b0\fs24\par'
+$rtfLines += '\pard\qr\i Generated on: ' + (Get-Date -Format "yyyy-MM-dd HH:mm") + '\i0\par\par'
+$rtfLines += '\pard\qc\b\fs30 Website Introduction\b0\fs24\par\par'
+$rtfLines += '\pard\ql\sb180\sa180\b\fs32 Welcome\b0\fs24\par'
 $rtfLines += Escape-RtfText($welcomeText) + '\par\par'
 $rtfLines += '\b Advantages of AI in language education\b0\line'
 $rtfLines += Escape-RtfText($prosText) + '\par\par'
 $rtfLines += '\b Disadvantages of AI in language education\b0\line'
-$rtfLines += Escape-RtfText($consText) + '\par\page'
+$rtfLines += Escape-RtfText($consText) + '\par\par\page'
 
-$rtfLines += '\pard\qc\b Table of Contents\b0\fs24\line'
+$rtfLines += '\pard\qc\b\fs36 Table of Contents\b0\fs24\par\par'
 foreach ($line in $tocEntries) {
-    $rtfLines += Escape-RtfText($line) + '\line'
+    if ($line -match '^\d+\. ') {
+        # Category
+        $rtfLines += '\pard\b\fs28 ' + (Escape-RtfText($line)) + '\b0\fs24\par\par'
+    }
+    elseif ($line -match '^\s+\d+\.\d+') {
+        # Subcategory
+        $rtfLines += '\pard\li360 ' + (Escape-RtfText($line.Trim())) + '\par'
+    }
+    else {
+        # Engine/tool
+        $rtfLines += '\pard\li720\sa120 ' + (Escape-RtfText($line.Trim())) + '\par'
+    }
 }
 $rtfLines += '\page'
 
@@ -230,19 +242,20 @@ $categoryIndex = 0
 foreach ($category in $categoryOrder) {
     $categoryIndex++
     $subcategoryIndex = 0
-    $rtfLines += '\pard\b\fs32 ' + (Escape-RtfText("$categoryIndex. $category")) + '\b0\fs24\line'
+    $rtfLines += '\page'
+    $rtfLines += '\pard\sb240\sa240\b\fs36 ' + (Escape-RtfText("$categoryIndex. $category")) + '\b0\fs24\par\par'
     $subs = $categoryStructures[$category].Keys | Sort-Object { $subcategoryOrder[$_] }
     foreach ($sub in $subs) {
         $subcategoryIndex++
         $subNumber = "$categoryIndex.$subcategoryIndex"
-        $rtfLines += '\pard\b\fs28 ' + (Escape-RtfText("$subNumber $sub")) + '\b0\fs24\line'
+        $rtfLines += '\pard\sb180\sa180\b\fs30 ' + (Escape-RtfText("$subNumber $sub")) + '\b0\fs24\par'
         $engineIndex = 0
         foreach ($engine in $categoryStructures[$category][$sub]) {
             $engineIndex++
             $engineNumber = "$subNumber.$engineIndex"
             if (-not $seenEngine.ContainsKey($engine)) {
                 $seenEngine[$engine] = [PSCustomObject]@{ Category = $category; Subcategory = $sub; Number = $engineNumber }
-                $rtfLines += '\pard\b\fs24 ' + (Escape-RtfText("$engineNumber $engine")) + '\b0\fs24\line'
+                $rtfLines += '\pard\sb120\sa120\b\fs26 ' + (Escape-RtfText("$engineNumber $engine")) + '\b0\fs24\par'
                 $engineData = Find-EngineData $engine
                 if ($null -eq $engineData) {
                     $rtfLines += Escape-RtfText("Details for '$engine' were not found in $AiDataCsv.") + '\par'
@@ -262,10 +275,11 @@ foreach ($category in $categoryOrder) {
                         $rtfLines += '\pard\ql\i ' + (Escape-RtfText("Description: $description")) + '\i0\par'
                     }
                     if ($prosItems.Count -gt 0) {
-                        $rtfLines += '\b Pros:\b0\par'
-                        foreach ($item in $prosItems) {
-                            $rtfLines += Escape-RtfText("• $item") + '\line '
+                        $rtfLines += '\par\b Cons:\b0\par\par'
+                        foreach ($item in $consItems) {
+                            $rtfLines += '\pard\li360\sa120 ' + Escape-RtfText("• $item") + '\par'
                         }
+                        $rtfLines += '\par'
                     } else {
                         $rtfLines += '\b Pros:\b0 N/A\par'
                     }
