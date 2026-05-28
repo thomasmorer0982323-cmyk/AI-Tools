@@ -1,14 +1,17 @@
 Engine,Subcategory
 HeyGen,Video generator
 HeyGen,Presentation generator
+Heygen,Translation support
 Synthesia,Video generator
 Synthesia,Presentation generator
+Synthesia,Translation support
 Runway,Video generator
 DALL-E free,Image generator 
 Midjourney,Image generator
 Leonardo AI,Image generator
 ChatGPT,AI-chatbots
-Claude Opus,AI-chatbots
+Claude,AI-chatbots
+Claude,Lesson plan generator
 Gemini,AI-chatbots
 Mistral,AI-chatbots
 Perplexity,AI-chatbots
@@ -51,7 +54,11 @@ WorksheetZone,Generating exercises
 StudyGlenAI,Generating exercises
 Grammarly,Writing support
 DeepL,Writing support
-Deepl, Translation support
+DeepL, Translation support
 QuillBot,Writing support
+QuillBot, Translation support
 LanguageTool,Writing support
 Paperpal,Writing support
+TalkPal AI,Speech support
+Reverso,Translation support
+PI,Speech support
