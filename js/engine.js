@@ -97,6 +97,7 @@ const slideshowExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
 const slideshowDisplayMs = 2000;
 const slideshowTransitionMs = 2000;
 const maxSlideshowImages = 12;
+const slideshowImageCache = new Map();
 
 function normalizeImageBaseName(filename) {
     return filename
@@ -117,11 +118,38 @@ function getEngineImagePrefixes(engineTitle) {
 
 function probeImage(src) {
     return new Promise(resolve => {
+        if (slideshowImageCache.has(src)) {
+            resolve(true);
+            return;
+        }
+
         const image = new Image();
-        image.onload = () => resolve(true);
+        image.onload = () => {
+            slideshowImageCache.set(src, image);
+            resolve(true);
+        };
         image.onerror = () => resolve(false);
         image.src = src;
     });
+}
+
+async function preloadSlideshowImages(imageSources) {
+    const preloadTasks = imageSources.map(src => new Promise(resolve => {
+        if (slideshowImageCache.has(src)) {
+            resolve();
+            return;
+        }
+
+        const image = new Image();
+        image.onload = () => {
+            slideshowImageCache.set(src, image);
+            resolve();
+        };
+        image.onerror = () => resolve();
+        image.src = src;
+    }));
+
+    await Promise.all(preloadTasks);
 }
 
 async function findExistingImage(folderName, prefix, suffix) {
@@ -186,10 +214,12 @@ function setSlideshowImage(imageElement, imageSrc, engineTitle, imageNumber) {
 
 async function setupEngineSlideshow(engineTitle, imageName) {
     const slideshow = document.getElementById('engineSlideshow');
+    const previousButton = document.getElementById('enginePrevButton');
+    const nextButton = document.getElementById('engineNextButton');
     let currentImage = document.getElementById('engineImageCurrent');
     let nextImage = document.getElementById('engineImageNext');
 
-    if (!slideshow || !currentImage || !nextImage || !engineTitle) {
+    if (!slideshow || !currentImage || !nextImage || !previousButton || !nextButton || !engineTitle) {
         return;
     }
 
@@ -206,6 +236,18 @@ async function setupEngineSlideshow(engineTitle, imageName) {
     const matchingImages = await discoverSlideshowImages(engineTitle, imageName);
 
     if (!matchingImages.length) {
+        slideshowImageCache.clear();
+        slideshow.classList.add('hidden');
+        currentImage.removeAttribute('src');
+        nextImage.removeAttribute('src');
+        currentImage.alt = '';
+        nextImage.alt = '';
+        return;
+    }
+
+    await preloadSlideshowImages(matchingImages);
+
+    if (!matchingImages.length) {
         slideshow.classList.add('hidden');
         currentImage.removeAttribute('src');
         nextImage.removeAttribute('src');
@@ -215,6 +257,81 @@ async function setupEngineSlideshow(engineTitle, imageName) {
     }
 
     let currentIndex = 0;
+    let isAnimating = false;
+
+    const clearTimers = () => {
+        if (slideshowInterval) {
+            clearTimeout(slideshowInterval);
+            slideshowInterval = null;
+        }
+        if (slideshowAnimationTimeout) {
+            clearTimeout(slideshowAnimationTimeout);
+            slideshowAnimationTimeout = null;
+        }
+    };
+
+    const scheduleAutoNext = () => {
+        clearTimers();
+        if (matchingImages.length <= 1) {
+            return;
+        }
+
+        slideshowInterval = window.setTimeout(() => {
+            transitionTo((currentIndex + 1) % matchingImages.length, 'next');
+        }, slideshowDisplayMs);
+    };
+
+    const transitionTo = (targetIndex, direction, animate = true) => {
+        if (targetIndex === currentIndex) {
+            return;
+        }
+
+        clearTimers();
+
+        if (!animate) {
+            resetSlideshowLayer(currentImage);
+            resetSlideshowLayer(nextImage);
+            setSlideshowImage(currentImage, matchingImages[targetIndex], engineTitle, targetIndex + 1);
+            currentImage.classList.add('is-active');
+            currentIndex = targetIndex;
+            isAnimating = false;
+            scheduleAutoNext();
+            return;
+        }
+
+        if (isAnimating) {
+            return;
+        }
+
+        isAnimating = true;
+
+        resetSlideshowLayer(currentImage);
+        resetSlideshowLayer(nextImage);
+        setSlideshowImage(nextImage, matchingImages[targetIndex], engineTitle, targetIndex + 1);
+        currentImage.classList.add('is-active');
+        nextImage.classList.add('is-next');
+
+        requestAnimationFrame(() => {
+            if (direction === 'prev') {
+                currentImage.classList.add('slide-out-right');
+                nextImage.classList.add('slide-in-left');
+            } else {
+                currentImage.classList.add('slide-out-left');
+                nextImage.classList.add('slide-in-right');
+            }
+        });
+
+        slideshowAnimationTimeout = window.setTimeout(() => {
+            resetSlideshowLayer(currentImage);
+            resetSlideshowLayer(nextImage);
+            nextImage.classList.add('is-active');
+            currentIndex = targetIndex;
+            [currentImage, nextImage] = [nextImage, currentImage];
+            isAnimating = false;
+            scheduleAutoNext();
+        }, slideshowTransitionMs);
+    };
+
     resetSlideshowLayer(currentImage);
     resetSlideshowLayer(nextImage);
     setSlideshowImage(currentImage, matchingImages[currentIndex], engineTitle, currentIndex + 1);
@@ -222,35 +339,25 @@ async function setupEngineSlideshow(engineTitle, imageName) {
     slideshow.classList.remove('hidden');
 
     if (matchingImages.length === 1) {
+        previousButton.classList.add('hidden');
+        nextButton.classList.add('hidden');
         return;
     }
 
-    const queueNextSlide = () => {
-        slideshowInterval = window.setTimeout(() => {
-            const nextIndex = (currentIndex + 1) % matchingImages.length;
-            resetSlideshowLayer(currentImage);
-            resetSlideshowLayer(nextImage);
-            setSlideshowImage(nextImage, matchingImages[nextIndex], engineTitle, nextIndex + 1);
-            currentImage.classList.add('is-active');
-            nextImage.classList.add('is-next');
+    previousButton.classList.remove('hidden');
+    nextButton.classList.remove('hidden');
 
-            requestAnimationFrame(() => {
-                currentImage.classList.add('slide-out-left');
-                nextImage.classList.add('slide-in-right');
-            });
-
-            slideshowAnimationTimeout = window.setTimeout(() => {
-                resetSlideshowLayer(currentImage);
-                resetSlideshowLayer(nextImage);
-                nextImage.classList.add('is-active');
-                currentIndex = nextIndex;
-                [currentImage, nextImage] = [nextImage, currentImage];
-                queueNextSlide();
-            }, slideshowTransitionMs);
-        }, slideshowDisplayMs);
+    previousButton.onclick = () => {
+        const previousIndex = (currentIndex - 1 + matchingImages.length) % matchingImages.length;
+        transitionTo(previousIndex, 'prev', false);
     };
 
-    queueNextSlide();
+    nextButton.onclick = () => {
+        const nextIndex = (currentIndex + 1) % matchingImages.length;
+        transitionTo(nextIndex, 'next', false);
+    };
+
+    scheduleAutoNext();
 }
 
 const params = new URLSearchParams(window.location.search);

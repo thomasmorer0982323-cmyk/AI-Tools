@@ -579,14 +579,32 @@ a:hover {
 /* IMAGE */
 .engine-slideshow {
     display: flex;
+    align-items: center;
     justify-content: center;
+    gap: var(--space-3);
+}
+
+.engine-slideshow-nav {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 132, 0, 0.9);
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.engine-slideshow-nav:hover {
+    background: rgba(230, 105, 0, 0.95);
 }
 
 .engine-slideshow-stage {
     position: relative;
     width: min(750px, 100%);
     aspect-ratio: 4 / 3;
-    margin: var(--space-4) auto;
+    margin: var(--space-4) 0;
     overflow: hidden;
 }
 
@@ -628,10 +646,31 @@ a:hover {
     animation: slideOutToLeft 2s ease forwards;
 }
 
+.engine-image-layer.slide-in-left {
+    opacity: 1;
+    animation: slideInFromLeft 2s ease forwards;
+}
+
+.engine-image-layer.slide-out-right {
+    opacity: 1;
+    animation: slideOutToRight 2s ease forwards;
+}
+
 @keyframes slideInFromRight {
     from {
         opacity: 1;
         transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 1;
+        transform: translateX(-100%);
     }
     to {
         opacity: 1;
@@ -647,6 +686,17 @@ a:hover {
     to {
         opacity: 0;
         transform: translateX(-100%);
+    }
+}
+
+@keyframes slideOutToRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
     }
 }
 
