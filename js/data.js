@@ -1,3 +1,5 @@
+const csvDataCache = new Map();
+
 function parseCsvText(csvText) {
     const rows = [];
     let row = [];
@@ -47,11 +49,16 @@ function parseCsvText(csvText) {
 
 async function loadCSV(filename, expectedHeaders = null) {
 
+    if (csvDataCache.has(filename)) {
+        return csvDataCache.get(filename);
+    }
+
     const response = await fetch(`data/${filename}`);
     const data = await response.text();
 
     const rows = parseCsvText(data);
     if (!rows.length) {
+        csvDataCache.set(filename, []);
         return [];
     }
 
@@ -66,7 +73,7 @@ async function loadCSV(filename, expectedHeaders = null) {
 
     const dataRows = hasHeaderRow ? rows.slice(1) : rows;
 
-    return dataRows.map(values => {
+    const parsedData = dataRows.map(values => {
         let obj = {};
 
         headers.forEach((header, index) => {
@@ -75,6 +82,9 @@ async function loadCSV(filename, expectedHeaders = null) {
 
         return obj;
     });
+
+    csvDataCache.set(filename, parsedData);
+    return parsedData;
 }
 
 async function loadAiData() {

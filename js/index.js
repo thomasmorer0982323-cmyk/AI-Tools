@@ -39,7 +39,16 @@ function displayCategories() {
     });
 }
 
-function displaySearchResults(searchTerm) {
+function scrollToResults() {
+    const resultsSection = document.getElementById("categoryList");
+    if (!resultsSection) {
+        return;
+    }
+
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function displaySearchResults(searchTerm, shouldScroll = false) {
     loadAllData().then(({ aiData, subcatCats, engineSubcats }) => {
         const categoryList = document.getElementById("categoryList");
         categoryList.innerHTML = ''; // Clear previous content
@@ -58,6 +67,9 @@ function displaySearchResults(searchTerm) {
 
         if (uniqueEngines.length === 0) {
             categoryList.innerHTML = '<p>No results found.</p>';
+            if (shouldScroll) {
+                requestAnimationFrame(scrollToResults);
+            }
             return;
         }
 
@@ -77,6 +89,10 @@ function displaySearchResults(searchTerm) {
 
             categoryList.appendChild(card);
         });
+
+        if (shouldScroll) {
+            requestAnimationFrame(scrollToResults);
+        }
     });
 }
 
@@ -101,7 +117,7 @@ document.getElementById('searchButton').addEventListener('click', () => {
     const searchTerm = document.getElementById('searchInput').value.trim();
     if (searchTerm) {
         updateSearchUrl(searchTerm);
-        displaySearchResults(searchTerm);
+        displaySearchResults(searchTerm, true);
     } else {
         updateSearchUrl('');
         displayCategories();
@@ -113,7 +129,7 @@ document.getElementById('searchInput').addEventListener('keypress', (e) => {
         const searchTerm = document.getElementById('searchInput').value.trim();
         if (searchTerm) {
             updateSearchUrl(searchTerm);
-            displaySearchResults(searchTerm);
+            displaySearchResults(searchTerm, true);
         } else {
             updateSearchUrl('');
             displayCategories();

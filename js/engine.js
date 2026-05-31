@@ -98,6 +98,7 @@ const slideshowDisplayMs = 2000;
 const slideshowTransitionMs = 2000;
 const maxSlideshowImages = 12;
 const slideshowImageCache = new Map();
+const slideshowProbeCache = new Map();
 
 function normalizeImageBaseName(filename) {
     return filename
@@ -107,28 +108,42 @@ function normalizeImageBaseName(filename) {
         .toLowerCase();
 }
 
-function getEngineImagePrefixes(engineTitle) {
-    const rawValue = (engineTitle || '').trim().toLowerCase();
-    const compactValue = rawValue.replace(/[^a-z0-9]+/g, '');
-    const underscoreValue = rawValue.replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-    const hyphenValue = rawValue.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+function getEngineImagePrefixes(engineTitle, imageName) {
+    return [...new Set([
+        normalizeImageBaseName(imageName || ''),
+        normalizeImageBaseName(engineTitle || '')
+    ].filter(Boolean))];
+}
 
-    return [...new Set([compactValue, underscoreValue, hyphenValue].filter(Boolean))];
+function getPreferredExtensions(imageName) {
+    const extensionMatch = (imageName || '').trim().toLowerCase().match(/\.([a-z0-9]+)$/);
+    const preferredExtension = extensionMatch ? extensionMatch[1] : '';
+    return [...new Set([preferredExtension, ...slideshowExtensions].filter(Boolean))];
 }
 
 function probeImage(src) {
     return new Promise(resolve => {
         if (slideshowImageCache.has(src)) {
+            slideshowProbeCache.set(src, true);
             resolve(true);
+            return;
+        }
+
+        if (slideshowProbeCache.has(src)) {
+            resolve(slideshowProbeCache.get(src));
             return;
         }
 
         const image = new Image();
         image.onload = () => {
             slideshowImageCache.set(src, image);
+            slideshowProbeCache.set(src, true);
             resolve(true);
         };
-        image.onerror = () => resolve(false);
+        image.onerror = () => {
+            slideshowProbeCache.set(src, false);
+            resolve(false);
+        };
         image.src = src;
     });
 }
@@ -152,8 +167,8 @@ async function preloadSlideshowImages(imageSources) {
     await Promise.all(preloadTasks);
 }
 
-async function findExistingImage(folderName, prefix, suffix) {
-    for (const extension of slideshowExtensions) {
+async function findExistingImage(folderName, prefix, suffix, extensionsToTry) {
+    for (const extension of extensionsToTry) {
         const candidate = `${folderName}/${prefix}${suffix}.${extension}`;
         if (await probeImage(candidate)) {
             return candidate;
@@ -164,28 +179,26 @@ async function findExistingImage(folderName, prefix, suffix) {
 }
 
 async function discoverSlideshowImages(engineTitle, imageName) {
-    const prefixes = [...new Set([
-        ...getEngineImagePrefixes(engineTitle),
-        ...getEngineImagePrefixes(normalizeImageBaseName(imageName || ''))
-    ])];
+    const prefixes = getEngineImagePrefixes(engineTitle, imageName);
+    const extensionsToTry = getPreferredExtensions(imageName);
     const discoveredImages = [];
     const seenImages = new Set();
 
     for (const prefix of prefixes) {
-        const mainImage = await findExistingImage('images', prefix, '');
+        const mainImage = await findExistingImage('images', prefix, '', extensionsToTry);
         if (mainImage && !seenImages.has(mainImage)) {
             seenImages.add(mainImage);
             discoveredImages.push(mainImage);
         }
 
-        const slideshowBaseImage = await findExistingImage('imagesSlideshow', prefix, '');
+        const slideshowBaseImage = await findExistingImage('imagesSlideshow', prefix, '', extensionsToTry);
         if (slideshowBaseImage && !seenImages.has(slideshowBaseImage)) {
             seenImages.add(slideshowBaseImage);
             discoveredImages.push(slideshowBaseImage);
         }
 
         for (let index = 1; index <= maxSlideshowImages; index += 1) {
-            const numberedImage = await findExistingImage('imagesSlideshow', prefix, String(index));
+            const numberedImage = await findExistingImage('imagesSlideshow', prefix, String(index), extensionsToTry);
             if (!numberedImage) {
                 if (index > 1) {
                     break;
@@ -233,26 +246,27 @@ async function setupEngineSlideshow(engineTitle, imageName) {
         slideshowAnimationTimeout = null;
     }
 
+    const fallbackImage = imageName ? `images/${imageName.trim()}` : '';
+    if (fallbackImage) {
+        resetSlideshowLayer(currentImage);
+        setSlideshowImage(currentImage, fallbackImage, engineTitle, 1);
+        currentImage.classList.add('is-active');
+        slideshow.classList.remove('hidden');
+        previousButton.classList.add('hidden');
+        nextButton.classList.add('hidden');
+    }
+
     const matchingImages = await discoverSlideshowImages(engineTitle, imageName);
 
     if (!matchingImages.length) {
         slideshowImageCache.clear();
-        slideshow.classList.add('hidden');
-        currentImage.removeAttribute('src');
-        nextImage.removeAttribute('src');
-        currentImage.alt = '';
-        nextImage.alt = '';
-        return;
-    }
-
-    await preloadSlideshowImages(matchingImages);
-
-    if (!matchingImages.length) {
-        slideshow.classList.add('hidden');
-        currentImage.removeAttribute('src');
-        nextImage.removeAttribute('src');
-        currentImage.alt = '';
-        nextImage.alt = '';
+        if (!fallbackImage) {
+            slideshow.classList.add('hidden');
+            currentImage.removeAttribute('src');
+            nextImage.removeAttribute('src');
+            currentImage.alt = '';
+            nextImage.alt = '';
+        }
         return;
     }
 
@@ -338,6 +352,8 @@ async function setupEngineSlideshow(engineTitle, imageName) {
     currentImage.classList.add('is-active');
     slideshow.classList.remove('hidden');
 
+    preloadSlideshowImages(matchingImages).catch(() => { });
+
     if (matchingImages.length === 1) {
         previousButton.classList.add('hidden');
         nextButton.classList.add('hidden');
@@ -376,7 +392,7 @@ Promise.all([loadAiData(), loadSubcategoryCategories(), loadEngineSubcategories(
     document.getElementById("engineName").innerText =
         engine.Engine;
 
-    await setupEngineSlideshow(engine.Engine, engine.imagelink);
+    setupEngineSlideshow(engine.Engine, engine.imagelink);
 
     document.getElementById("engineLink").href =
         engine.weblink;
