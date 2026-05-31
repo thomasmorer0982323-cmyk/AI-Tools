@@ -1,6 +1,6 @@
-# AICat - AI Tools Website
+﻿# AICat - AI Tools Website
 
-Een overzicht van verschillende AI-tools en engines.
+Een overzicht van verschillende AI tools en engines.
 
 ## Lokale ontwikkeling
 Open `index.html` in je browser om de site lokaal te bekijken.

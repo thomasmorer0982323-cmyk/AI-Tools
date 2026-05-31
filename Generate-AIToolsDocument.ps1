@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 Generate a reader-friendly Word/RTF document from the AI Tools website data.
 
@@ -23,11 +23,11 @@ Path to data/EngineSubcategories.csv
 Path to index.html
 
 .PARAMETER OutputRtf
-Path to the generated RTF output file. Default is .\AI-Tools-Export.rtf
+Path to the generated RTF output file. Default is .\AI Tools-Export.rtf
 
 .PARAMETER LocalPageBaseUrl
 Base URL used to build the AIEngine.html subcategory detail link.
-Default is https://thomasmorer0982323-cmyk.github.io/AI-Tools
+Default is https://thomasmorer0982323-cmyk.github.io/AI Tools
 
 .PARAMETER ImagesFolder
 Path to the folder that contains the main engine images.
@@ -48,10 +48,10 @@ param(
     [string]$IndexHtml = ".\index.html",
 
     [Parameter(Mandatory=$false)]
-    [string]$OutputRtf = ".\AI-Tools-Export.rtf",
+    [string]$OutputRtf = ".\AI Tools-Export.rtf",
 
     [Parameter(Mandatory=$false)]
-    [string]$LocalPageBaseUrl = "https://thomasmorer0982323-cmyk.github.io/AI-Tools",
+    [string]$LocalPageBaseUrl = "https://thomasmorer0982323-cmyk.github.io/AI Tools",
 
     [Parameter(Mandatory=$false)]
     [string]$ImagesFolder = ".\images"
@@ -377,3 +377,4 @@ $rtfContent = $rtfLines -join "`r`n"
 Set-Content -Path $OutputRtf -Value $rtfContent -Encoding ASCII
 
 Write-Host "Generated $OutputRtf" -ForegroundColor Green
+
