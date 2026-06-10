@@ -104,6 +104,35 @@ function updateSearchUrl(searchTerm) {
     }
 }
 
+async function getTotalCommentCount() {
+    if (!window.db) {
+        return 0;
+    }
+
+    try {
+        const snapshot = await db.collection('ratings').get();
+        let total = 0;
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            if (Array.isArray(data.comments)) {
+                total += data.comments.length;
+            }
+        });
+        return total;
+    } catch (error) {
+        console.error('Error getting total comment count:', error);
+        return 0;
+    }
+}
+
+async function displayFooterCommentCount() {
+    const count = await getTotalCommentCount();
+    const footerCommentCount = document.getElementById('footerCommentCount');
+    if (footerCommentCount) {
+        footerCommentCount.textContent = count;
+    }
+}
+
 const initialSearchTerm = new URLSearchParams(window.location.search).get('search');
 if (initialSearchTerm) {
     document.getElementById('searchInput').value = initialSearchTerm;
@@ -148,3 +177,5 @@ toggles.forEach(toggle => {
         toggle.title = details.classList.contains('hidden') ? `Show more ${isPros ? 'pros' : 'cons'}` : `Hide ${isPros ? 'pros' : 'cons'} details`;
     });
 });
+
+displayFooterCommentCount();
